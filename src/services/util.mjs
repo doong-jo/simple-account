@@ -1,7 +1,6 @@
 const Util = {
     parseURL: () => {
-        const url = location.pathname !== '/' ? 
-            location.pathname.slice(0, -1) : '/';
+        const url = location.pathname || '/';
         return url;
     }
 };
