@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/doong-jo/membership-login#readme",
   "devDependencies": {
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "reload": "^3.0.1",
+    "watch": "^1.0.2"
   },
   "dependencies": {
     "express": "^4.17.1"
