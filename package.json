@@ -1,0 +1,28 @@
+{
+  "name": "membership-login",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doong-jo/membership-login.git"
+  },
+  "keywords": [
+    "todo"
+  ],
+  "author": "Sungdong Jo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/doong-jo/membership-login/issues"
+  },
+  "homepage": "https://github.com/doong-jo/membership-login#readme",
+  "devDependencies": {
+    "jest": "^24.9.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
