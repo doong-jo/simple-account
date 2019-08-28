@@ -22,5 +22,4 @@ const router = async () => {
     await page.after_render();
 }
 
-window.addEventListener('hashchange', router);
 window.addEventListener('load', router);
