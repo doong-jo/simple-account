@@ -1,8 +1,8 @@
-import Util from './services/util.js';
+import Util from './services/util.mjs';
 
-import Main from './views/pages/Main.js';
-import Signup from './views/pages/Signup.js';
-import Login from './views/pages/Login.js';
+import Main from './views/pages/Main.mjs';
+import Signup from './views/pages/Signup.mjs';
+import Login from './views/pages/Login.mjs';
 
 // 참조 : https://dev.to/rishavs/making-a-single-page-app-in-ye-good-olde-js-es6-3eng
 const routes = {
