@@ -9,7 +9,7 @@ const Signup = {
         let view =  /*html*/`
         <div class="form-container">
             <div class="form-flex-items"></div>
-            <div class="form-flex-items two-flex-grow">
+            <div class="form-flex-items">
                 <div class="title">
                 <h2>회원가입</h2>
                 </div>
@@ -28,7 +28,7 @@ const Signup = {
 
     buildSignupForm: () => {
         Form.initializeByClassName('form-signup');
-        const itemsWillMade = [
+        let itemsWillMade = [
             {
                 type: 'label',
                 for: 'f_id',
@@ -70,18 +70,18 @@ const Signup = {
                 for: 'f_birth',
                 innerHTML : '생년월일'
             }, {
-                type: 'input-rows',
-                inputs: [
+                type: 'element-rows',
+                elements: [
                     {
                         type: 'input',
                         inputType: 'number',
                         nameAndId: 'f_birth_year',
-                        placeholder : '연도 (4자)'
+                        placeholder : '출생연도 (4자)'
                     }, {
-                        type: 'input',
-                        inputType: 'number',
+                        type: 'select',
                         nameAndId: 'f_birth_month',
-                        placeholder : '월'
+                        values: ['월', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                        selectedInd: 0,
                     }, {
                         type: 'input',
                         inputType: 'number',
@@ -126,28 +126,37 @@ const Signup = {
             //     defaultValues: [],
             //     Id: 'f_phone',
             // },
+            {
+                type: 'checkboxWithText',
+                inputType: 'checkbox',
+                checkboxPos: 'right',
+                text: '약관에 동의합니다',
+                value: false,
+                underlined: true,
+                nameAndId: 'f_agree',
+                disabled: true,
+            }, {
+                type: 'element-rows',
+                elements: [
+                    { 
+                        type: 'button',
+                        className: 'primary',
+                        text: '초기화',
+                        doAction: () => {
+                            console.log('초기화하기');
+                        }
+                    }, {
+                        type: 'button',
+                        className: 'primary',
+                        text: '가입하기',
+                        doAction: () => {
+                            console.log('가입하기');
+                        }
+                    }
+                ]
+            }
         ];
         Form.makeForm(itemsWillMade);
-        Form.addCheckBoxWithText({
-            checkboxPos: 'right',
-            text: '약관에 동의합니다',
-            underlined: true,
-            nameAndId: 'f_agree',
-            disabled: true,
-        });
-        Form.addButtonsInline([
-            { 
-                text: 초기화하기,
-                doAction: () => {
-                    console.log('초기화하기');
-                }
-            }, {
-                text: 가입하기,
-                doAction: () => {
-                    console.log('가입하기');
-                }
-            }
-        ]);
     },
 };
 

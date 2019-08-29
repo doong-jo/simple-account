@@ -1,5 +1,11 @@
 :root {
     --form-margin : 1em;
+    --form-box-padding : 0.6em;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: row;
 }
 
 .form-container .title {
@@ -9,9 +15,40 @@
 }
 
 .form-container input {
+    width: 100%;
     border: 1px solid #ccc;
-    padding: 0.6em;
+    padding: var(--form-box-padding);
     font-size: 1.2em;
+}
+
+.form-container input[type=checkbox] {
+    width: auto;
+}
+
+.form-container select {
+    min-width: 5em;
+    font-size: 1.2em;
+    padding: var(--form-box-padding);
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: #fff url(https://static.nid.naver.com/images/join/pc/sel_arr_2x.gif) 100% 50% no-repeat;
+}
+
+.form-container button {
+    width: 100%;
+    padding: var(--form-box-padding);
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    box-sizing: border-box;
+    border: 0;
+}
+
+.form-container button.primary {
+    color: white;
+    background-color: #08a600;
 }
 
 .form-container form label {
@@ -19,27 +56,27 @@
     font-weight: bold;
 }
 
-.form-container {
-    display: flex;
-    flex-direction: row;
+.form-container div.inline {
+    margin: 0.5em 0;
 }
+
+
 
 .form-inputs-container {
     display: flex;
     flex-direction: row;
 }
 
-.form-flex-items:nth-child(even) {
-    margin-left: var(--form-margin);
+.form-flex-items {
     margin-right: var(--form-margin);
 }
 
-.form-flex-items {
-    flex: 1 0 1em;
+.form-flex-items:last-child {
+    margin-right : 0em;
 }
 
-.two-flex-grow {
-    flex: 2 0 0;
+.form-flex-items {
+    flex: 1 1 10em;
 }
 
 form select {
