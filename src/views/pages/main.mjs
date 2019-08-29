@@ -5,7 +5,7 @@ const Main = {
     render: async () => {
         Util.appendCSS('main');
 
-        let view = `
+        let view = /*html*/`
         <section class="video_container">
             <header>
                 <div></div>

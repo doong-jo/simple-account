@@ -1,0 +1,47 @@
+:root {
+    --form-margin : 1em;
+}
+
+.form-container .title {
+    text-align: center;
+    color: #03cf5d;
+    padding: 3em;
+}
+
+.form-container input {
+    border: 1px solid #ccc;
+    padding: 0.6em;
+    font-size: 1.2em;
+}
+
+.form-container form label {
+    margin-top: var(--form-margin);
+    font-weight: bold;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.form-inputs-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.form-flex-items:nth-child(even) {
+    margin-left: var(--form-margin);
+    margin-right: var(--form-margin);
+}
+
+.form-flex-items {
+    flex: 1 0 1em;
+}
+
+.two-flex-grow {
+    flex: 2 0 0;
+}
+
+form select {
+    width: 100%;
+}
