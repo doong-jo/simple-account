@@ -6,7 +6,7 @@ const Main = {
         Util.appendCSS('main');
 
         let view = `
-        <div class="video_container">
+        <section class="video_container">
             <header>
                 <div></div>
                 <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
@@ -30,7 +30,7 @@ const Main = {
                     </div>
                 </div>
             </header>
-        </div>
+        </section>
         `;
         
         return view;
