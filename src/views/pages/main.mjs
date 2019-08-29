@@ -1,6 +1,10 @@
+import Util from '../../services/util.mjs';
+
 const Main = {
     // https://connect.or.kr/ 의 배경 영상 이용
     render: async () => {
+        Util.appendCSS('main');
+
         let view = `
         <div class="video_container">
             <header>
