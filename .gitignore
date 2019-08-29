@@ -87,3 +87,4 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+src/index.dev.html
