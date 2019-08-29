@@ -1,6 +1,36 @@
+body {
+    background: #FAFAFA;
+    font-size: 1em;
+}
+
+select {
+    font-size: 1.2em;
+    padding: .8em .5em;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: #fff url(https://static.nid.naver.com/images/join/pc/sel_arr_2x.gif) 100% 50% no-repeat;
+}
+
+input[type=checkbox] {
+    vertical-align: text-top;
+}
+
 .container {
     max-width: 100%;
     padding-left: 0px;
     padding-right: 0px;
     margin: 0 auto;
 }
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.two-flex-grow {
+    flex: 2 0 0;
+}
+
