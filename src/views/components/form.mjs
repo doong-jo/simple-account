@@ -32,7 +32,10 @@ class Form {
                         flexItemDiv = document.createElement("div"),
                         elementBuilder = NodeBuilder.makeElementByType(),
                         child = elementBuilder[eachArgs.type](eachArgs);    
-    
+                    
+                    if( eachArgs.attrType ) {
+                        child.type = eachArgs.attrType;
+                    }
                     
                     flexItemDiv.className = "form-flex-items";
                     flexItemDiv.appendChild(child);
@@ -52,10 +55,13 @@ class Form {
                     div = document.createElement('div'),
                     sp = document.createElement('span'),
                     chk = NodeBuilder.makeInput(args),
-                    { checkboxPos, underlined, text } = args;
+                    { checkboxPos, underlined, text, textClassName, textOnClick } = args;
     
                 div.className = "vertical-margin";
                 sp.innerHTML = text;
+                sp.className = textClassName;
+                sp.onclick = textOnClick;
+
                 if( underlined ) sp.style = underlined ? "text-decoration: underline;" : "";
     
                 const checkboxPosAdjusting = {
