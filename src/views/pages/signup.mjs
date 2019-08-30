@@ -1,10 +1,10 @@
-import Util from '../../services/util.mjs';
+import NodeBuilder from '../../services/nodebuilder.mjs';
 import Form from '../components/form.mjs';
 
 const Signup = {
     render : async () => {
-        Util.appendCSS('signup');
-        Util.appendCSS('form');
+        NodeBuilder.appendCSS('signup');
+        NodeBuilder.appendCSS('form');
 
         let view =  /*html*/`
         <div class="form-container">

@@ -12,7 +12,7 @@ const routes = {
 
 const router = async () => {
     const content = document.getElementById('page_container');
-    const parsedURL = Util.parseURL();
+    const parsedURL = Util.getURLPath();
     console.log(parsedURL);
 
     let page = routes[parsedURL] ? routes[parsedURL] : Error404

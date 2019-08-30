@@ -1,4 +1,4 @@
-import Util from '../../services/util.mjs';
+import NodeBuilder from '../../services/nodebuilder.mjs';
 
 let formElement;
 
@@ -13,12 +13,12 @@ const Form = {
 
     makeElementOfType : {
         'label' : (args) => {
-            const l = Util.makeLabel(args);
+            const l = NodeBuilder.makeLabel(args);
             formElement.appendChild(l);
         },
 
         'input' : function (args) {
-            const i = Util.makeInput(args);
+            const i = NodeBuilder.makeInput(args);
             formElement.appendChild(i);
         },
 
@@ -33,7 +33,7 @@ const Form = {
                 console.log(eachArgs.type);
                 const 
                     flexItemDiv = document.createElement("div"),
-                    elementBuilder = Util.makeElementByType(),
+                    elementBuilder = NodeBuilder.makeElementByType(),
                     child = elementBuilder[eachArgs.type](eachArgs);    
 
                 
@@ -46,7 +46,7 @@ const Form = {
         },
 
         'select' : (args) => {
-            const s = Util.makeSelectAndOption(args);
+            const s = NodeBuilder.makeSelectAndOption(args);
             formElement.appendChild(s);
         },
 
@@ -54,7 +54,7 @@ const Form = {
             const 
                 div = document.createElement('div'),
                 sp = document.createElement('span'),
-                chk = Util.makeInput(args),
+                chk = NodeBuilder.makeInput(args),
                 { checkboxPos, underlined, text } = args;
 
             div.className = "inline"
