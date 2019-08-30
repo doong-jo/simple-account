@@ -39,8 +39,10 @@ const NodeBuilder = {
     makeSelectAndOption: (args) => {
         const 
             s = document.createElement("select"),
-            { selectedInd, values } = args;
+            { selectedInd, values, nameAndId } = args;
 
+        s.id = nameAndId;
+        s.name = nameAndId;
 
         values.forEach((v, i) => {
             const o = document.createElement("option");
