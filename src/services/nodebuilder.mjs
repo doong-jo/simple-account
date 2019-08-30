@@ -8,6 +8,10 @@ const NodeBuilder = {
         document.getElementsByTagName("head")[0].appendChild( link );
     },
 
+    disalbeCSS: (title) => {
+        document.querySelector(`link[title=${title}]`).disabled = true;
+    },
+
     makeInput: (args) => {
         const 
             i = document.createElement("input"),
