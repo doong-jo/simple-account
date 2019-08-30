@@ -1,91 +1,98 @@
 import NodeBuilder from '../../services/nodebuilder.mjs';
+import TagList from './taglist.mjs';
 
-let formElement;
+class Form {
+    constructor(className, ind = 0) {
+        this.formElement = document.getElementsByClassName(className)[ind];
 
-const Form = {
-    initializeById : function (id) {
-        formElement = document.getElementById(id)[0];
-    },
+        this.init();
+    }
 
-    initializeByClassName : function (className) {
-        formElement = document.getElementsByClassName(className)[0];
-    },
-
-    makeElementOfType : {
-        'label' : (args) => {
-            const l = NodeBuilder.makeLabel(args);
-            formElement.appendChild(l);
-        },
-
-        'input' : function (args) {
-            const i = NodeBuilder.makeInput(args);
-            formElement.appendChild(i);
-        },
-
-        'element-rows' : (args) => {
-            const 
-                flexCotainerDiv = document.createElement("div"),
-                { elements } = args;
-
-            flexCotainerDiv.className = "form-inputs-container";
-
-            elements.forEach(eachArgs => {
-                console.log(eachArgs.type);
+    init() {
+        this.makeElementOfType = {
+            'label' : (args) => {
+                const l = NodeBuilder.makeLabel(args);
+                this.formElement.appendChild(l);
+            },
+    
+            'input' : (args) => {
+                const i = NodeBuilder.makeInput(args);
+                this.formElement.appendChild(i);
+            },
+    
+            'element-rows' : (args) => {
                 const 
-                    flexItemDiv = document.createElement("div"),
-                    elementBuilder = NodeBuilder.makeElementByType(),
-                    child = elementBuilder[eachArgs.type](eachArgs);    
+                    flexCotainerDiv = document.createElement("div"),
+                    { elements } = args;
+    
+                flexCotainerDiv.className = "form-inputs-container";
+    
+                elements.forEach(eachArgs => {
+                    const 
+                        flexItemDiv = document.createElement("div"),
+                        elementBuilder = NodeBuilder.makeElementByType(),
+                        child = elementBuilder[eachArgs.type](eachArgs);    
+    
+                    
+                    flexItemDiv.className = "form-flex-items";
+                    flexItemDiv.appendChild(child);
+    
+                    flexCotainerDiv.appendChild(flexItemDiv);
+                }); 
+                this.formElement.appendChild(flexCotainerDiv);
+            },
+    
+            'select' : (args) => {
+                const s = NodeBuilder.makeSelectAndOption(args);
+                this.formElement.appendChild(s);
+            },
+    
+            'checkboxWithText' : (args) => { 
+                const 
+                    div = document.createElement('div'),
+                    sp = document.createElement('span'),
+                    chk = NodeBuilder.makeInput(args),
+                    { checkboxPos, underlined, text } = args;
+    
+                div.className = "vertical-margin";
+                sp.innerHTML = text;
+                if( underlined ) sp.style = underlined ? "text-decoration: underline;" : "";
+    
+                const checkboxPosAdjusting = {
+                    'left': () => {
+                        chk.style = "margin-right: 1em;";
+                        div.appendChild(chk);
+                        div.appendChild(sp);
+                    },
+                    'right': () => {
+                        chk.style = "margin-left: 1em;";
+                        div.appendChild(sp);
+                        div.appendChild(chk);
+                    }
+                };
+    
+                const pos = checkboxPos || right;
+                checkboxPosAdjusting[pos]();
+    
+                this.formElement.appendChild(div);
+            },
 
-                
-                flexItemDiv.className = "form-flex-items";
-                flexItemDiv.appendChild(child);
+            'tag-list' : (args) => {
+                const tagList = new TagList(args.id, args.defaultValues);
+                this.formElement.appendChild(tagList.element);
+            }
+        };
+    }
 
-                flexCotainerDiv.appendChild(flexItemDiv);
-            }); 
-            formElement.appendChild(flexCotainerDiv);
-        },
+    registerEvents() {
 
-        'select' : (args) => {
-            const s = NodeBuilder.makeSelectAndOption(args);
-            formElement.appendChild(s);
-        },
+    }
 
-        'checkboxWithText' : (args) => { 
-            const 
-                div = document.createElement('div'),
-                sp = document.createElement('span'),
-                chk = NodeBuilder.makeInput(args),
-                { checkboxPos, underlined, text } = args;
-
-            div.className = "inline"
-            sp.innerHTML = text;
-            if( underlined ) sp.style = underlined ? "text-decoration: underline;" : "";
-
-            const checkboxPosAdjusting = {
-                'left': () => {
-                    chk.style = "margin-right: 1em;";
-                    div.appendChild(chk);
-                    div.appendChild(sp);
-                },
-                'right': () => {
-                    chk.style = "margin-left: 1em;";
-                    div.appendChild(sp);
-                    div.appendChild(chk);
-                }
-            };
-
-            const pos = checkboxPos || right;
-            checkboxPosAdjusting[pos]();
-
-            formElement.appendChild(div);
-        },
-    },
-
-    makeForm : function(formData)  {
+    makeForm(formData) {
         formData.forEach(data => {
             this.makeElementOfType[data.type](data);
         });
-    },
-};
+    }
+}
 
 export default Form;

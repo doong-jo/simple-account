@@ -1,6 +1,6 @@
 :root {
-    --form-margin : 1em;
-    --form-box-padding : 0.6em;
+    --form-margin : 1rem;
+    --form-box-padding : 0.6rem;
 }
 
 .form-container {
@@ -9,9 +9,10 @@
 }
 
 .form-container .title {
+
     text-align: center;
     color: #03cf5d;
-    padding: 3em;
+    padding: 3rem;
 }
 
 .form-container input {
@@ -27,7 +28,7 @@
 
 .form-container select {
     min-width: 5em;
-    font-size: 1.2em;
+    font-size: 1.2rem;
     padding: var(--form-box-padding);
     border: 1px solid #ccc;
     border-radius: 0px;
@@ -39,7 +40,7 @@
 .form-container button {
     width: 100%;
     padding: var(--form-box-padding);
-    font-size: 20px;
+    font-size: 1.3rem;
     font-weight: 700;
     text-align: center;
     box-sizing: border-box;
@@ -56,11 +57,9 @@
     font-weight: bold;
 }
 
-.form-container div.inline {
-    margin: 0.5em 0;
+.form-container {
+    margin: 0.5rem 0;
 }
-
-
 
 .form-inputs-container {
     display: flex;
@@ -72,11 +71,15 @@
 }
 
 .form-flex-items:last-child {
-    margin-right : 0em;
+    margin-right : 0;
 }
 
 .form-flex-items {
-    flex: 1 1 10em;
+    flex: 1 1 0;
+}
+
+.form-flex-items.double {
+    flex: 1 1 20rem;
 }
 
 form select {

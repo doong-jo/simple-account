@@ -5,13 +5,14 @@ const Signup = {
     render : async () => {
         NodeBuilder.appendCSS('signup');
         NodeBuilder.appendCSS('form');
+        NodeBuilder.appendCSS('tag');
 
         let view =  /*html*/`
         <div class="form-container">
             <div class="form-flex-items"></div>
-            <div class="form-flex-items">
+            <div class="form-flex-items double">
                 <div class="title">
-                <h2>회원가입</h2>
+                <h1>회원가입</h1>
                 </div>
                 <form class="form-signup">
                 </form>
@@ -27,7 +28,8 @@ const Signup = {
     },
 
     buildSignupForm: () => {
-        Form.initializeByClassName('form-signup');
+        const formComp = new Form('form-signup');
+
         let itemsWillMade = [
             {
                 type: 'label',
@@ -120,13 +122,11 @@ const Signup = {
                 type: 'label',
                 for: 'f_favorite',
                 innerHTML : '관심사'
-            },
-            //  {
-            //     type: 'tag_list',
-            //     defaultValues: [],
-            //     Id: 'f_phone',
-            // },
-            {
+            }, {
+                type: 'tag-list',
+                defaultValues: ['쇼핑', '테스트1', '테스트2', '테스트3', '테스트4', '테스트5', '테스트6'],
+                id: 'f_favorite',
+            }, {
                 type: 'checkboxWithText',
                 inputType: 'checkbox',
                 checkboxPos: 'right',
@@ -156,7 +156,7 @@ const Signup = {
                 ]
             }
         ];
-        Form.makeForm(itemsWillMade);
+        formComp.makeForm(itemsWillMade);
     },
 };
 
