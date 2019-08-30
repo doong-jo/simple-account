@@ -1,9 +1,9 @@
-import Util from '../../services/util.mjs';
+import NodeBuilder from '../../services/NodeBuilder.mjs';
 
 const Main = {
     // https://connect.or.kr/ 의 배경 영상 이용
     render: async () => {
-        Util.appendCSS('main');
+        NodeBuilder.appendCSS('main');
 
         let view = /*html*/`
         <section class="video_container">
