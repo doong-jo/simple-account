@@ -3,12 +3,14 @@ import Form from '../components/form.mjs';
 
 const Signup = {
     render : async () => {
+        NodeBuilder.disalbeCSS('bootstrap');
+        
         NodeBuilder.appendCSS('signup');
         NodeBuilder.appendCSS('form');
         NodeBuilder.appendCSS('tag');
 
         let view =  /*html*/`
-        <div class="form-container">
+        <section class="form-container">
             <div class="form-flex-items"></div>
             <div class="form-flex-items double">
                 <div class="title">
@@ -18,7 +20,8 @@ const Signup = {
                 </form>
             </div>
             <div class="form-flex-items"></div>
-        </div>
+        </section>
+        <div class="modal"></div>
         `
         return view;
     },
@@ -27,7 +30,11 @@ const Signup = {
         this.buildSignupForm();
     },
 
-    buildSignupForm: () => {
+    toggleTermModal: function() {
+        console.log('toggleTermModal');
+    },
+
+    buildSignupForm: function() {
         const formComp = new Form('form-signup');
 
         let itemsWillMade = [
@@ -134,12 +141,15 @@ const Signup = {
                 value: false,
                 underlined: true,
                 nameAndId: 'f_agree',
+                textOnClick: this.toggleTermModal,
+                textClassName: 'label-checkbox',
                 disabled: true,
             }, {
                 type: 'element-rows',
                 elements: [
                     { 
                         type: 'button',
+                        attrType: 'button',
                         className: 'primary',
                         text: '초기화',
                         doAction: () => {
@@ -147,6 +157,7 @@ const Signup = {
                         }
                     }, {
                         type: 'button',
+                        attrType: 'submit',
                         className: 'primary',
                         text: '가입하기',
                         doAction: () => {

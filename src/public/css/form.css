@@ -61,6 +61,10 @@
     margin: 0.5rem 0;
 }
 
+.form-container span.label-checkbox {
+    cursor: pointer;
+}
+
 .form-inputs-container {
     display: flex;
     flex-direction: row;
