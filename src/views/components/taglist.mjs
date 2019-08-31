@@ -94,11 +94,12 @@ class TagList {
         };
         
         div.className = "inline tag-box";
+
         div.appendChild(span);
         div.appendChild(img);
 
         const tagBoxes = document.getElementsByClassName("tag-box");
-        
+
         if( tagBoxes.length < 1 ) {
             this.tagElement.insertAdjacentElement('afterbegin', div);
         } else {
