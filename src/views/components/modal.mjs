@@ -3,59 +3,80 @@ import NodeBuilder from '../../services/NodeBuilder.mjs';
 class Modal {
     constructor(id, options = {}) {
         this.options = options;
-
         this.elementId = id;
-        this.init(id);
-    }
-
-    init(id) {
-        this.modalContainer = document.getElementById(id);
-        this.makeModal(this.options);
     }
 
     makeModal(options) {
-        /* build */
-
         this.modalView = /*html*/`
-            <div class="modal-title">
-                <span class="modal-title-text">${options.title}</span>
-                <img src="public/svg/close.svg" />
+            <div id="${this.elementId}" class="modal-container invisible">
+                <div class="modal-title">
+                    <span class="modal-title-text">${options.title}</span>
+                    <img class="close" src="public/svg/close.svg" />
+                </div>
+                <div class="modal-content"></div>
+                <div class="modal-footer"></div>
             </div>
-            <div class="modal-content">
-                ${options.content}
-            </div>
-            <div class="modal-footer"></div>
         `;
-
-        this.modalContainer.innerHTML = this.modalView;
-
-        this.setContent(options);
-        this.setButtons(options);
-
-        return this.modalView;
-    }
-
-    setContent(options) {
-        const content = document.querySelector(`#${elementId} .modal-content`);
-
-        content.innerHTML = options.content;
-    }
-
-    setButtons(options) {
-        const footer = document.querySelector(`#${elementId} .modal-footer`);
-
-        if( options.confirmBtn ) {
-            const btn = NodeBuilder.makeButton(options.confirmBtn);
-            footer.appendChild(btn);
-        }
-        if( options.cancleBtn ) {
-            const btn = NodeBuilder.makeButton(options.cancleBtn);
-            footer.appendChild(btn);
-        }
-    }
-
-    toggle() {
         
+        document.body.insertAdjacentHTML('beforeend', this.modalView);
+        this.modalContainer = document.querySelector(`#${this.elementId}`);
+
+        this.setSize(options.width, options.height);
+        this.setCloseBtnEvent();
+        this.setContent(options.content);
+        this.setButtons(options.footer);
+
+        return this;
+    }
+
+    setSize(width, height) {
+        if( !width && !height ) { return; }
+        this.modalContainer.style =  `width : ${width}; height: ${height}`;
+    }
+
+    setCloseBtnEvent() {
+        const closeBtn = document.querySelector(`#${this.elementId} .close`);
+        const closeBtnClickedListener = () => {
+            this.toggle(false);
+        };
+        closeBtn.addEventListener('click', closeBtnClickedListener);
+    }
+
+    toggle(trig) {
+        const mdContainerClasses = this.modalContainer.classList;
+
+        if( !trig ) {
+            mdContainerClasses.remove('visible');
+            mdContainerClasses.add('invisible');
+        } else {
+            mdContainerClasses.remove('invisible');
+            mdContainerClasses.add('visible');
+        }
+    }
+
+    setContent(content) {
+        const modalContent = document.querySelector(`#${this.elementId} .modal-content`);
+        modalContent.innerHTML = content;
+    }
+
+    setButtons(footerOptions) {
+        const footer = document.querySelector(`#${this.elementId} .modal-footer`);
+
+        if( footerOptions.cancleBtn ) {
+            const btn = NodeBuilder.makeButton(footerOptions.cancleBtn);
+            btn.onclick = () => { this.toggle(false) };
+            footer.appendChild(btn);
+        }
+        
+        if( footerOptions.confirmBtn ) {
+            const btn = NodeBuilder.makeButton(footerOptions.confirmBtn);
+            footer.appendChild(btn);
+        }
+        
+    }
+
+    get container() {
+        return this.modalContainer;
     }
 }
 

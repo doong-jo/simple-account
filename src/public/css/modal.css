@@ -1,12 +1,91 @@
 .modal-container {
-    width: 60%;
-    height: 60%;
-    background: blue;
-    position: absolute;
+    width: min-content;
+    height: min-content;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #bbb;
+    background: #f6f6f6;
+    padding: 1rem 2rem;
+    position: fixed;
     top: 0;
     bottom: 0;
-    right: 0;
     left: 0;
     right: 0;
     margin: auto auto;
+    --vertical-margin: 2rem;
 }
+
+.modal-container.invisible {
+    visibility: hidden;
+}
+
+.modal-container.visible {
+    visibility: visible;
+}
+
+.modal-title {
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.modal-title .modal-title-text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-bottom: 2px solid #333;
+}
+
+.modal-container .modal-title .close {
+    cursor: pointer;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-bottom: var(--vertical-margin);
+}
+
+.modal-container .modal-content {
+    flex: 1 0 auto;
+    margin-bottom: var(--vertical-margin);
+}
+
+.modal-content textarea {
+    width: 100%;
+    height: 100%;
+    resize: none;
+    color: #333;
+}
+
+.modal-content .ask-sentence {
+    font-size : 1.2rem;
+    font-weight: 500;
+}
+
+.modal-footer {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.modal-footer button {
+    flex-grow: 1;
+    color: white;
+    background-color: var(--naver-green);
+    width: 50%;
+    padding: 0.6rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+    box-sizing: border-box;
+    border: 0;
+}
+
+.modal-footer button {
+    margin-right: 1rem;
+}
+
+.modal-footer button:last-child {
+    margin-right: 0rem;
+}
+
+

@@ -1,24 +1,19 @@
-:root {
-    --form-margin : 1rem;
-    --form-box-padding : 0.6rem;
-}
-
 .form-container {
+    --form-margin-small: 0.5rem;
+    --form-margin: 1rem;
+    --form-margin-1-5x : 1.5rem;
+    --form-box-padding: 0.6rem;
+    font-size: 1rem;
     display: flex;
     flex-direction: row;
-}
-
-.form-container .title {
-
-    text-align: center;
-    color: #03cf5d;
-    padding: 3rem;
 }
 
 .form-container input {
     width: 100%;
     border: 1px solid #ccc;
     padding: var(--form-box-padding);
+    margin-top : var(--form-margin-small);
+    margin-bottom : var(--form-margin-small);
     font-size: 1.2em;
 }
 
@@ -30,16 +25,18 @@
     min-width: 5em;
     font-size: 1.2rem;
     padding: var(--form-box-padding);
+    margin-top : var(--form-margin-small);
+    margin-bottom : var(--form-margin-small);
     border: 1px solid #ccc;
     border-radius: 0px;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background: #fff url(https://static.nid.naver.com/images/join/pc/sel_arr_2x.gif) 100% 50% no-repeat;
+    background: #fff url(/public/img/sel_arr.gif) 100% 50% no-repeat;
 }
 
 .form-container button {
     width: 100%;
-    padding: var(--form-box-padding);
+    padding: 1rem var(--form-box-padding);
     font-size: 1.3rem;
     font-weight: 700;
     text-align: center;
@@ -49,11 +46,11 @@
 
 .form-container button.primary {
     color: white;
-    background-color: #08a600;
+    background-color: var(--naver-green);
 }
 
 .form-container form label {
-    margin-top: var(--form-margin);
+    margin-top: var(--form-margin-1-5x);
     font-weight: bold;
 }
 
@@ -65,27 +62,27 @@
     cursor: pointer;
 }
 
+.form-container .form-flex-items {
+    margin-right: var(--form-margin);
+    flex: 1 1 0;
+}
+
+.form-container .form-flex-items.double {
+    flex: 1 1 20rem;
+}
+
 .form-inputs-container {
     display: flex;
     flex-direction: row;
 }
 
-.form-flex-items {
-    margin-right: var(--form-margin);
-}
-
-.form-flex-items:last-child {
+.form-container .form-flex-items:last-child {
     margin-right : 0;
 }
 
-.form-flex-items {
-    flex: 1 1 0;
-}
-
-.form-flex-items.double {
-    flex: 1 1 20rem;
-}
-
-form select {
-    width: 100%;
+.form-container div.term span {
+    text-decoration: underline;
+    vertical-align: middle;
+    position: relative;
+    top: 0.5rem;
 }

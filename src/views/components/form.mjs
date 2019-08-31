@@ -4,11 +4,10 @@ import TagList from './taglist.mjs';
 class Form {
     constructor(className, ind = 0) {
         this.formElement = document.getElementsByClassName(className)[ind];
+        this.tagList = [];
+        this.chkBoxes = [];
+        this.hasValidateorItems = [];
 
-        this.init();
-    }
-
-    init() {
         this.makeElementOfType = {
             'label' : (args) => {
                 const l = NodeBuilder.makeLabel(args);
@@ -57,9 +56,13 @@ class Form {
                     chk = NodeBuilder.makeInput(args),
                     { checkboxPos, underlined, text, textClassName, textOnClick } = args;
     
-                div.className = "vertical-margin";
+                this.chkBoxes.push(chk);
+
+                div.className = "term vertical-margin";
                 sp.innerHTML = text;
                 sp.className = textClassName;
+
+                console.log(textOnClick);
                 sp.onclick = textOnClick;
 
                 if( underlined ) sp.style = underlined ? "text-decoration: underline;" : "";
@@ -84,20 +87,114 @@ class Form {
             },
 
             'tag-list' : (args) => {
-                const tagList = new TagList(args.id, args.defaultValues);
-                this.formElement.appendChild(tagList.element);
+                const newTagList = new TagList(args.id, args.defaultValues)
+                this.formElement.appendChild(newTagList.element);
+
+                this.tagList.push(newTagList);
             }
+        };
+
+        const getElemVal = (nameAndId) => { 
+            return document.querySelector(`${nameAndId}`).value;
+        };
+        this.getValueOfEachType = {
+            'input': (elem) => {
+                const value = getElemVal(elem.nameAndId);
+                return { value, denySentence: elem.denySentence };
+            },
+            'select': (elem) => { // same function => input
+                const value = getElemVal(elem.nameAndId);
+                return { value, denySentence: elem.denySentence };
+            },
+            'checkboxWithText': (elem) => {
+                const { checked } = getElemVal(elem.nameAndId);
+                return { value : checked, denySentence: elem.denySentence };
+            },
+            'element-rows': (elems) => {
+                let r = [];
+                elems.elements.forEach(elem => {
+                    const { value } = getElemVal(elem.nameAndId);
+                    r.push({
+                        value, denySentence: elem.denySentence
+                    })
+                });
+
+                return r;
+            },
         };
     }
 
-    registerEvents() {
+    makeForm(formData) {
+        formData.forEach(itemData => {
+            this.makeElementOfType[itemData.type](itemData);
+            if( itemData.validator ) { this.hasValidateorItems.push(itemData); }
+        });
 
+        return this;
     }
 
-    makeForm(formData) {
-        formData.forEach(data => {
-            this.makeElementOfType[data.type](data);
+    reset() {
+        this.formElement.reset();
+        this.tagList.forEach(item => {
+            item.reset();
+        })
+    }
+
+    // checkInvalidTagList() {
+    //     let id = '';
+    //     this.tagList.some(item => {
+    //         id = item.id;
+    //         return item.tags.length === 0;
+    //     })
+
+    //     return id;
+    // }
+
+    // checkInvalidFormItem() {
+    //     const formData = new FormData(this.formElement);
+    //     let invalidKey = '';
+
+    //     const keys = Array.from(formData.keys());
+
+    //     keys.some((item) => {
+    //         return formData.get(item) === '' ?
+    //              (invalidKey = item, true) : false;
+    //     })
+
+    //     return invalidKey;
+    // }
+
+    validateForm() {
+        const res = [];
+        this.hasValidateorItems.forEach(itemData => {
+            const valueforValidate = this.getValueOfEachType[itemData.type](itemData);
+
+            if( valueforValidate.length ) {
+                value.forEach(v => {
+                    const { value, denySentence = '' } = v;
+                    res.push(
+                        itemData.validator({value, denySentence})
+                    );
+                });
+            } else {
+                const { value, denySentence = '' } = valueforValidate;
+                res.push(
+                    itemData.validator({value, denySentence})
+                );
+            }
         });
+
+        return res;
+    }
+
+    get denySentence() {
+        const validatedResultArr = this.validateForm();
+        console.log(validatedResultArr);
+        if( validatedResultArr.length > 0 ) {
+            return validatedResultArr[0].sentence;
+        }
+
+        return 'success';
     }
 }
 

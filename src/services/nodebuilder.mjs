@@ -64,11 +64,12 @@ const NodeBuilder = {
     makeButton: (args) => {
         const
             btn = document.createElement('button'),
-            { text, doAction, className } = args;
+            { text, doAction, className, disabled } = args;
 
         btn.innerHTML = text;
         btn.onclick = doAction;
         btn.className = className || "";
+        btn.disabled = disabled;
 
         return btn;
     },
