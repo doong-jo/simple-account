@@ -4,22 +4,21 @@ class Modal {
     constructor(id, options = {}) {
         this.options = options;
         this.elementId = id;
+        this.modalContainer = document.querySelector(`#${this.elementId}`);
     }
 
     makeModal(options) {
         this.modalView = /*html*/`
-            <div id="${this.elementId}" class="modal-container invisible">
-                <div class="modal-title">
-                    <span class="modal-title-text">${options.title}</span>
-                    <img class="close" src="public/svg/close.svg" />
-                </div>
-                <div class="modal-content"></div>
-                <div class="modal-footer"></div>
+            <div class="modal-title">
+                <span class="modal-title-text">${options.title}</span>
+                <img class="close" src="public/svg/close.svg" />
             </div>
+            <div class="modal-content"></div>
+            <div class="modal-footer"></div>
         `;
         
-        document.body.insertAdjacentHTML('beforeend', this.modalView);
-        this.modalContainer = document.querySelector(`#${this.elementId}`);
+        this.modalContainer.insertAdjacentHTML('beforeend', this.modalView);
+        this.closeBtn = this.modalContainer.querySelector(`.close`);
 
         this.setSize(options.width, options.height);
         this.setCloseBtnEvent();
@@ -35,32 +34,26 @@ class Modal {
     }
 
     setCloseBtnEvent() {
-        const closeBtn = document.querySelector(`#${this.elementId} .close`);
-        const closeBtnClickedListener = () => {
+        this.closeBtn.addEventListener('click', () => {
             this.toggle(false);
-        };
-        closeBtn.addEventListener('click', closeBtnClickedListener);
+        });
     }
 
     toggle(trig) {
         const mdContainerClasses = this.modalContainer.classList;
 
-        if( !trig ) {
-            mdContainerClasses.remove('visible');
-            mdContainerClasses.add('invisible');
-        } else {
-            mdContainerClasses.remove('invisible');
-            mdContainerClasses.add('visible');
-        }
+        mdContainerClasses.remove(trig ? 'invisible' : 'visible');
+        mdContainerClasses.add(trig ? 'visible' : 'invisible');
     }
 
     setContent(content) {
-        const modalContent = document.querySelector(`#${this.elementId} .modal-content`);
-        modalContent.innerHTML = content;
+        this.modalContainer
+            .querySelector(`.modal-content`)
+            .innerHTML = content;
     }
 
     setButtons(footerOptions) {
-        const footer = document.querySelector(`#${this.elementId} .modal-footer`);
+        const footer = this.modalContainer.querySelector(`.modal-footer`);
 
         if( footerOptions.cancleBtn ) {
             const btn = NodeBuilder.makeButton(footerOptions.cancleBtn);
@@ -69,10 +62,10 @@ class Modal {
         }
         
         if( footerOptions.confirmBtn ) {
-            const btn = NodeBuilder.makeButton(footerOptions.confirmBtn);
-            footer.appendChild(btn);
+            footer.appendChild(
+                NodeBuilder.makeButton(footerOptions.confirmBtn)
+            );
         }
-        
     }
 
     get container() {

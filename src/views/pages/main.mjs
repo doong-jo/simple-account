@@ -3,6 +3,8 @@ import NodeBuilder from '../../services/NodeBuilder.mjs';
 const Main = {
     // https://connect.or.kr/ 의 배경 영상 이용
     render: async () => {
+        NodeBuilder.enableCSS('bootstrap');
+        
         NodeBuilder.appendCSS('main');
 
         let view = /*html*/`
@@ -16,7 +18,7 @@ const Main = {
                 <div class="container h-100; text-white">
                     <div class="form-signin">
                         <form action="login" method="">
-                            <h1 class="h3 mb-3 font-weight-normal">awesome-todo</h1>
+                            <h1 class="login-title mb-3 font-weight-bold">Awesome-Todo</h1>
                             <label for="inputEmail" class="sr-only">이메일</label>
                             <input type="email" id="inputEmail" class="form-control" placeholder="이메일" required="" autofocus="">
                             <label for="inputPassword" class="sr-only">비밀번호</label>
@@ -24,7 +26,7 @@ const Main = {
                             <div class="mb-3"></div>
                             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
                         </form>
-                        <a href="signup">
+                        <a href="./#signup">
                             <button class="mt-2 btn btn-lg btn-secondary btn-block">Sign up</button>
                         </a>
                     </div>

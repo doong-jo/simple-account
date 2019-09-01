@@ -1,12 +1,14 @@
+import NodeBuilder from "../../services/nodebuilder.mjs";
+
 class TagList {
-    constructor(id) {
+    constructor(id, min) {
+        this.CLOSE_SVG_PATH = "public/svg/close.svg";
+
         this.tagElement = document.createElement('div');
         this.tagElement.className = "tag-container vertical-margin";
         this.tagElement.id = id;
-
-        this.CLOSE_SVG_PATH = "public/svg/close.svg";
-
         this.tagData = [];
+        this.minTag = min;
 
         this.init();
     }
@@ -15,7 +17,7 @@ class TagList {
         this.tagInput = document.createElement('input');
         this.tagInput.type = "text";
 
-        for(var i=0; i<this.tagData.length; i++) {
+        for(let i=0; i<this.tagData.length; i++) {
             this.makeTag(this.tagData[i]);
         }
         this.tagElement.appendChild(this.tagInput);
@@ -25,13 +27,10 @@ class TagList {
 
     reset() {
         this.tagData = [];
-        const children = this.tagElement.children; 
 
-        for(var i=children.length - 1; i >= 0; i--) {
-            if( children[i].tagName !== "INPUT" ) {
-                this.tagElement.removeChild(children[i]); 
-            }
-        }
+        NodeBuilder.removeChildren(this.tagElement, function(child) {
+            return child.tagName !== "INPUT";
+        });
     }
 
     registerEvents() {
@@ -41,6 +40,7 @@ class TagList {
 
     inputEvent(e) {
         const inp = e.data;
+        if( inp === null ) { return; }
         if( inp === "," ||
             // check hangul '가,'
             (inp.length === 2 && String(inp)[1] === "," ) ) {
@@ -70,8 +70,18 @@ class TagList {
     removeLastTag() {
         this.tagInput.value = this.tagData.pop();
 
-        const tagBoxes = document.getElementsByClassName("tag-box");
+        const tagBoxes = this.tagElement.querySelectorAll(".tag-box");
         tagBoxes[tagBoxes.length - 1].remove();
+    }
+
+    removeClickedTag(e) {
+        const   
+            { parentElement } = e.target,
+            tagBoxes = this.tagElement.querySelectorAll(".tag-box"),
+            idx = Array.from(tagBoxes).indexOf(parentElement);
+
+        parentElement.remove();
+        this.tagData.splice(idx, 1);
     }
 
     addTag() {
@@ -89,16 +99,14 @@ class TagList {
         
         span.innerHTML = tagStr;
         img.src = this.CLOSE_SVG_PATH;
-        img.onclick = (e) => {
-            e.target.parentElement.remove();
-        };
+        img.onclick = this.removeClickedTag;
         
-        div.className = "inline tag-box";
+        div.className = "tag-box";
 
         div.appendChild(span);
         div.appendChild(img);
 
-        const tagBoxes = document.getElementsByClassName("tag-box");
+        const tagBoxes = this.tagElement.querySelectorAll(".tag-box");
 
         if( tagBoxes.length < 1 ) {
             this.tagElement.insertAdjacentElement('afterbegin', div);
@@ -115,8 +123,20 @@ class TagList {
         return this.tagElement;
     }
 
+    get inputElem() {
+        return this.tagElement.querySelector('input');
+    }
+
     get id() {
         return this.tagElement.id;
+    }
+
+    get min() {
+        return this.minTag;
+    }
+
+    get checkLength() {
+        return this.tags.length >= this.min;
     }
 }
 

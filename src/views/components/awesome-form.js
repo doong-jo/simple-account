@@ -4,7 +4,7 @@
  */
 
 class AwesomeForm extends HTMLElement {
-    constructor() {
+    constructor(formData) {
       super();
   
       // 엘리먼트의 기능들은 여기에 작성합니다.
@@ -35,5 +35,37 @@ class AwesomeForm extends HTMLElement {
 
     }
 }
+
+
+// export default class Component extends HTMLElement {
+//     constructor(componentName: string) {
+//         super()
+
+//         const node: Node = new View(componentName).node
+//         this.attachShadow({ mode: "open" }).appendChild(node)
+//     }
+
+//     getAttribute(qualifiedName: string): string {
+//         return super.getAttribute(qualifiedName) || ""
+//     }
+// }
+
+// export class buttonComponent extends Component {
+//     constructor() {
+//         super("customBtnComponent")
+//         const text = this.getAttribute("text")
+//         const btn = this.shadowRoot!.querySelector("button")!
+//         btn.innerText = text
+
+//         const goto = this.getAttribute("goto")
+
+//         if (goto) {
+//             btn.addEventListener("click", () => {
+//                 mainController.goTo(goto)
+//             })
+//         }
+//     }
+// }
+
 
 customElements.define('awesome-form', AwesomeForm, { extends: 'form' });

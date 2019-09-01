@@ -1,19 +1,18 @@
 import Util from './services/util.mjs';
 
-import Main from './views/pages/Main.mjs';
-import Signup from './views/pages/Signup.mjs';
-import Error404 from './views/pages/Error404.mjs';
+import Main from './views/pages/main.mjs';
+import Signup from './views/pages/signup.mjs';
+import Error404 from './views/pages/error404.mjs';
 
 // 참조 : https://dev.to/rishavs/making-a-single-page-app-in-ye-good-olde-js-es6-3eng
 const routes = {
-    '/': Main, 
-    '/signup': Signup, 
+    '': Main, 
+    '#signup': Signup, 
 };
 
 const router = async () => {
-    const content = document.getElementById('page_container');
-    const parsedURL = Util.getURLPath();
-    console.log(parsedURL);
+    const content = null || document.getElementById('page_container');
+    const parsedURL = window.location.hash;
 
     let page = routes[parsedURL] ? routes[parsedURL] : Error404
     content.innerHTML = await page.render();
@@ -21,3 +20,4 @@ const router = async () => {
 }
 
 window.addEventListener('load', router);
+window.addEventListener('hashchange', router);

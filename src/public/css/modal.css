@@ -5,7 +5,7 @@
     flex-direction: column;
     border: 2px solid #bbb;
     background: #f6f6f6;
-    padding: 1rem 2rem;
+    padding: 2rem 2rem;
     position: fixed;
     top: 0;
     bottom: 0;
@@ -13,14 +13,23 @@
     right: 0;
     margin: auto auto;
     --vertical-margin: 2rem;
+    visibility: hidden;
+    transform: scale(0.5);
+    opacity: 0;
 }
 
 .modal-container.invisible {
     visibility: hidden;
+    transform: scale(0.5);
+    opacity: 0;
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
 }
 
 .modal-container.visible {
     visibility: visible;
+    transform: scale(1.0);
+    opacity: 1;
+    transition: opacity 0.25s 0s, transform 0.25s;
 }
 
 .modal-title {
@@ -33,7 +42,8 @@
 .modal-title .modal-title-text {
     font-size: 1.2rem;
     font-weight: 500;
-    border-bottom: 2px solid #333;
+    text-decoration: underline;
+    text-underline-position: under;
 }
 
 .modal-container .modal-title .close {

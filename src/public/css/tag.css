@@ -8,6 +8,7 @@
 }
 
 .tag-box {
+    display: inline;
     padding: 0.4rem 0.6rem;
     background: #eee;
     border-radius: 0.5rem;

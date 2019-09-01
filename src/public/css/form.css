@@ -1,8 +1,9 @@
 .form-container {
     --form-margin-small: 0.5rem;
     --form-margin: 1rem;
-    --form-margin-1-5x : 1.5rem;
     --form-box-padding: 0.6rem;
+    --form-border: 1px solid #ccc;
+
     font-size: 1rem;
     display: flex;
     flex-direction: row;
@@ -10,15 +11,20 @@
 
 .form-container input {
     width: 100%;
-    border: 1px solid #ccc;
+    border: var(--form-border);
     padding: var(--form-box-padding);
     margin-top : var(--form-margin-small);
     margin-bottom : var(--form-margin-small);
     font-size: 1.2em;
 }
 
+.form-container input:focus {
+    border-color: var(--naver-green);
+}
+
 .form-container input[type=checkbox] {
     width: auto;
+    vertical-align: text-top;
 }
 
 .form-container select {
@@ -27,11 +33,15 @@
     padding: var(--form-box-padding);
     margin-top : var(--form-margin-small);
     margin-bottom : var(--form-margin-small);
-    border: 1px solid #ccc;
+    border: var(--form-border);
     border-radius: 0px;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background: #fff url(/public/img/sel_arr.gif) 100% 50% no-repeat;
+    background: #fff url(/src/public/img/sel_arr.gif) 100% 50% no-repeat;
+}
+
+.form-container select:focus {
+    border-color: var(--naver-green);
 }
 
 .form-container button {
@@ -50,7 +60,7 @@
 }
 
 .form-container form label {
-    margin-top: var(--form-margin-1-5x);
+    margin-top: var(--form-margin);
     font-weight: bold;
 }
 
@@ -67,8 +77,8 @@
     flex: 1 1 0;
 }
 
-.form-container .form-flex-items.double {
-    flex: 1 1 20rem;
+.form-container .form-flex-items.center {
+    flex: 0 0 30rem;
 }
 
 .form-inputs-container {
@@ -85,4 +95,25 @@
     vertical-align: middle;
     position: relative;
     top: 0.5rem;
+}
+
+.form-container .form-validator {
+    color: #ccc;
+    display: block;
+    font-weight: 500;
+    visibility: hidden;
+    --shake-animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) forwards;
+}
+
+.form-validator.warning {
+    color: #F44336;
+    visibility: visible;
+    animation: var(--shake-animation);
+    transform: translate(0, 0);
+}
+
+.form-validator.okay {
+    color: var(--naver-green);
+    visibility: visible;
+    transform: translate(0, 0);
 }

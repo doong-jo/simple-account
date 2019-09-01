@@ -5,14 +5,26 @@
 }
 
 .form-signin {
-    width: 100%;
-    max-width: 330px;
-    margin-top: 100px;
-    padding-top: 50px;
-    margin: auto;
+    max-width: 20rem;
+    height: min-content;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 10rem;
+    bottom: 0;
+    margin: 0 auto;
 }
 
-header {
+.form-signin .login-title {
+    font-size: 2.5rem;
+    background: linear-gradient(230deg, #a24bcf, #4b79cf, #4bc5cf);
+    background-size: 300% 300%;
+    animation: changeColor 3s ease infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.video_container header {
     height: -webkit-fill-available !important;
     position: relative;
     background-color: black;
@@ -22,7 +34,7 @@ header {
     overflow: hidden;
 }
 
-header video {
+.video_container header video {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -37,12 +49,12 @@ header video {
     transform: translateX(-50%) translateY(-50%);
 }
 
-header .container {
+.video_container header .container {
     position: relative;
     z-index: 2;
 }
 
-header .overlay {
+.video_container header .overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -51,4 +63,20 @@ header .overlay {
     background-color: black;
     opacity: 0.5;
     z-index: 1;
+}
+
+@-webkit-keyframes changeColor {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes changeColor {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes changeColor { 
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
 }
