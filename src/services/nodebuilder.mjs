@@ -1,6 +1,6 @@
 const NodeBuilder = {
     appendCSS: (name) => {
-        var link = document.createElement( "link" );
+        const link = document.createElement( "link" );
         link.href = 'public/css/' + name + '.css';
         link.type = "text/css";
         link.rel = "stylesheet";
@@ -12,18 +12,30 @@ const NodeBuilder = {
         document.querySelector(`link[title=${title}]`).disabled = true;
     },
 
+    enableCSS: (title) => {
+        document.querySelector(`link[title=${title}]`).disabled = false;
+    },
+
+    removeChildren(parent, cond = () => { return true; }) {
+        const { children } = parent;
+
+        for(let i=children.length - 1; i >= 0; i--) {
+            if( cond(children[i]) ) { parent.removeChild(children[i]);  }
+        }
+    },
+
     makeInput: (args) => {
         const 
             i = document.createElement("input"),
-            { inputType, nameAndId, placeholder, value, disabled } = args;
+            { inputType, nameAndId, placeholder,
+                value, disabled, maxLength } = args;
     
         i.type = inputType;
-        i.name = nameAndId;
-        i.id = nameAndId;
-
-        if (inputType !== 'checkbox') {
-            i.placeholder = placeholder;
-        } else {
+        i.name = i.id = nameAndId;
+        if( maxLength ) { i.maxLength = maxLength; }
+        
+        if (inputType !== 'checkbox') { i.placeholder = placeholder; } 
+        else {
             i.value = value;
             i.disabled = disabled;
         }
@@ -45,13 +57,11 @@ const NodeBuilder = {
             s = document.createElement("select"),
             { selectedInd, values, nameAndId } = args;
 
-        s.id = nameAndId;
-        s.name = nameAndId;
+        s.id = s.name = nameAndId;
 
         values.forEach((v, i) => {
             const o = document.createElement("option");
-            o.value = v;
-            o.innerHTML = v;
+            o.value = o.innerHTML = v;
 
             if( i === selectedInd ) { o.selected = true; }
 
@@ -64,8 +74,9 @@ const NodeBuilder = {
     makeButton: (args) => {
         const
             btn = document.createElement('button'),
-            { text, doAction, className, disabled } = args;
+            { text, doAction, className, disabled, attrType } = args;
 
+        btn.type = attrType;
         btn.innerHTML = text;
         btn.onclick = doAction;
         btn.className = className || "";
@@ -83,6 +94,34 @@ const NodeBuilder = {
             'button' : this.makeButton,
         }
     },
+
+    makeOptionsOfSelect: function(s, values) {
+        this.removeChildren(s);
+        
+        for(const value of values) {
+            const opt = document.createElement('option');
+            opt.value = opt.innerHTML = value;
+            
+            s.appendChild(opt);
+        }
+    },
+
+    makeSpan: function(args) {
+        const 
+            sp = document.createElement('span'), 
+            { 
+                className, innerHTML, onclick, 
+                textClassName, textOnClick, text,
+                underlined
+            } = args;
+        sp.className = textClassName || className;
+        sp.innerHTML = text || innerHTML;
+        sp.onclick = textOnClick || onclick;
+        sp.style = underlined ? 
+            'text-decoration: underline; text-underline-position: under;' : '';
+
+        return sp;
+    }
 };
 
 export default NodeBuilder;
