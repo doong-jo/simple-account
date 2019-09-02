@@ -29,13 +29,20 @@ function buildSignupDenyModal() {
 }
 
 class Signup {
+    constructor() {
+        this.includedCSS = ['signup', 'form', 'tag', 'modal'];
+
+        this.removeAllCSS = this.removeAllCSS.bind(this);
+    }
+
     async render() {
         NodeBuilder.disalbeCSS('bootstrap');
 
-        NodeBuilder.appendCSS('signup');
-        NodeBuilder.appendCSS('form');
-        NodeBuilder.appendCSS('tag');
-        NodeBuilder.appendCSS('modal');
+        this.includedCSS.forEach((css) => {
+            NodeBuilder.appendCSS(css);
+        });
+
+        this.includedCSS = ['signup', 'form', 'tag', 'modal'];
 
         this.view = SignupView;
         return this.view;
@@ -62,6 +69,7 @@ class Signup {
 
         this.denySpan = this.signupDenyModal.container.querySelector('.deny-signup-sentence');
         this.agreeBtn = this.termModal.container.querySelector('.agree');
+        this.termTextArea = this.termModal.container.querySelector('textarea');
 
         this.registerEvents();
     }
@@ -113,6 +121,9 @@ class Signup {
         this.resetForm = () => {
             this.resetModal.toggle(false);
             this.signupForm.reset();
+            this.termRead = false;
+            this.termTextArea.scrollTop = 0;
+            this.agreeBtn.disabled = true;
         };
 
         this.validateForm = () => {
@@ -128,9 +139,7 @@ class Signup {
     }
 
     registerEvents() {
-        const termTextArea = this.termModal.container.querySelector('textarea');
-
-        termTextArea.addEventListener('scroll', this.checkScroll);
+        this.termTextArea.addEventListener('scroll', this.checkScroll);
         this.monthOfBirth.addEventListener('change', this.checkMonthOfBirth);
     }
 
@@ -179,6 +188,12 @@ class Signup {
             },
         };
         return resetModal.makeModal(options);
+    }
+
+    removeAllCSS() {
+        this.includedCSS.forEach((cssName) => {
+            NodeBuilder.removeCSS(cssName);
+        });
     }
 }
 
