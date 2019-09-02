@@ -1,4 +1,4 @@
-.video_container {
+.main {
     text-align: center; 
     overflow-x: hidden; 
     overflow-y: hidden;
@@ -20,11 +20,10 @@
     background: linear-gradient(230deg, #a24bcf, #4b79cf, #4bc5cf);
     background-size: 300% 300%;
     animation: changeColor 3s ease infinite;
-    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.video_container header {
+.main header {
     height: -webkit-fill-available !important;
     position: relative;
     background-color: black;
@@ -34,7 +33,7 @@
     overflow: hidden;
 }
 
-.video_container header video {
+.main header video {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -49,12 +48,12 @@
     transform: translateX(-50%) translateY(-50%);
 }
 
-.video_container header .container {
+.main header .container {
     position: relative;
     z-index: 2;
 }
 
-.video_container header .overlay {
+.main header .overlay {
     position: absolute;
     top: 0;
     left: 0;

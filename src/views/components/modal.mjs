@@ -1,4 +1,6 @@
-import NodeBuilder from '../../services/NodeBuilder.mjs';
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
+import NodeBuilder from '../../services/nodeBuilder.mjs';
 
 class Modal {
     constructor(id, options = {}) {
@@ -16,9 +18,9 @@ class Modal {
             <div class="modal-content"></div>
             <div class="modal-footer"></div>
         `;
-        
+
         this.modalContainer.insertAdjacentHTML('beforeend', this.modalView);
-        this.closeBtn = this.modalContainer.querySelector(`.close`);
+        this.closeBtn = this.modalContainer.querySelector('.close');
 
         this.setSize(options.width, options.height);
         this.setCloseBtnEvent();
@@ -29,8 +31,8 @@ class Modal {
     }
 
     setSize(width, height) {
-        if( !width && !height ) { return; }
-        this.modalContainer.style =  `width : ${width}; height: ${height}`;
+        if (!width && !height) { return; }
+        this.modalContainer.style = `width : ${width}; height: ${height}`;
     }
 
     setCloseBtnEvent() {
@@ -48,23 +50,21 @@ class Modal {
 
     setContent(content) {
         this.modalContainer
-            .querySelector(`.modal-content`)
+            .querySelector('.modal-content')
             .innerHTML = content;
     }
 
     setButtons(footerOptions) {
-        const footer = this.modalContainer.querySelector(`.modal-footer`);
+        const footer = this.modalContainer.querySelector('.modal-footer');
 
-        if( footerOptions.cancleBtn ) {
+        if (footerOptions.cancleBtn) {
             const btn = NodeBuilder.makeButton(footerOptions.cancleBtn);
-            btn.onclick = () => { this.toggle(false) };
+            btn.onclick = () => { this.toggle(false); };
             footer.appendChild(btn);
         }
-        
-        if( footerOptions.confirmBtn ) {
-            footer.appendChild(
-                NodeBuilder.makeButton(footerOptions.confirmBtn)
-            );
+
+        if (footerOptions.confirmBtn) {
+            footer.appendChild(NodeBuilder.makeButton(footerOptions.confirmBtn));
         }
     }
 

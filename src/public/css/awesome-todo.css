@@ -12,12 +12,6 @@ footer {
     text-align: center;
 }
 
-header.title {
-    text-align: center;
-    color: var(--naver-light-green);
-    padding: 2rem;
-}
-
 .vertical-margin {
     margin: 0.5rem 0;
 }

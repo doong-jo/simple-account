@@ -1,11 +1,12 @@
-import NodeBuilder from "../../services/nodebuilder.mjs";
+/* eslint-disable import/extensions */
+import NodeBuilder from '../../services/nodebuilder.mjs';
 
 class TagList {
     constructor(id, min) {
-        this.CLOSE_SVG_PATH = "public/svg/close.svg";
+        this.CLOSE_SVG_PATH = 'public/svg/close.svg';
 
         this.tagElement = document.createElement('div');
-        this.tagElement.className = "tag-container vertical-margin";
+        this.tagElement.className = 'tag-container vertical-margin';
         this.tagElement.id = id;
         this.tagData = [];
         this.minTag = min;
@@ -15,9 +16,9 @@ class TagList {
 
     init() {
         this.tagInput = document.createElement('input');
-        this.tagInput.type = "text";
+        this.tagInput.type = 'text';
 
-        for(let i=0; i<this.tagData.length; i++) {
+        for (let i = 0; i < this.tagData.length; i += 1) {
             this.makeTag(this.tagData[i]);
         }
         this.tagElement.appendChild(this.tagInput);
@@ -28,8 +29,8 @@ class TagList {
     reset() {
         this.tagData = [];
 
-        NodeBuilder.removeChildren(this.tagElement, function(child) {
-            return child.tagName !== "INPUT";
+        NodeBuilder.removeChildren(this.tagElement, (child) => {
+            return child.tagName !== 'INPUT';
         });
     }
 
@@ -40,29 +41,25 @@ class TagList {
 
     inputEvent(e) {
         const inp = e.data;
-        if( inp === null ) { return; }
-        if( inp === "," ||
-            // check hangul '가,'
-            (inp.length === 2 && String(inp)[1] === "," ) ) {
+        const { length, value } = this.tagInput;
+        if (inp === null) { return; }
+        if (inp === ',' // check hangul '가,'
+            || (inp.length === 2 && String(inp)[1] === ',')) {
             this.tagInput.value = this.tagInput.value.trim();
-            if( this.tagInput.value !== ',' ) { this.addTag();}
+            if (this.tagInput.value !== ',') { this.addTag(); }
 
             this.tagInput.value = '';
-        } else if( inp === "Backspace" &&
-            this.tagData.length > 0 &&
-            this.tagInput.value === '' ) {
+        } else if (inp === 'Backspace' && length > 0 && value === '') {
             this.removeLastTag();
         }
     }
 
     keyDownEvent(e) {
         const inp = e.key;
+        const { length, value } = this.tagInput;
 
-        if( inp === "Backspace" &&
-            this.tagData.length > 0 &&
-            this.tagInput.value === '' ) {
+        if (inp === 'Backspace' && length > 0 && value === '') {
             this.removeLastTag();
-
             e.preventDefault();
         }
     }
@@ -70,15 +67,14 @@ class TagList {
     removeLastTag() {
         this.tagInput.value = this.tagData.pop();
 
-        const tagBoxes = this.tagElement.querySelectorAll(".tag-box");
+        const tagBoxes = this.tagElement.querySelectorAll('.tag-box');
         tagBoxes[tagBoxes.length - 1].remove();
     }
 
     removeClickedTag(e) {
-        const   
-            { parentElement } = e.target,
-            tagBoxes = this.tagElement.querySelectorAll(".tag-box"),
-            idx = Array.from(tagBoxes).indexOf(parentElement);
+        const { parentElement } = e.target;
+        const tagBoxes = this.tagElement.querySelectorAll('.tag-box');
+        const idx = Array.from(tagBoxes).indexOf(parentElement);
 
         parentElement.remove();
         this.tagData.splice(idx, 1);
@@ -87,31 +83,29 @@ class TagList {
     addTag() {
         const tagStr = this.tagInput.value.slice(0, -1);
 
-        this.makeTag(tagStr);   
+        this.makeTag(tagStr);
         this.tagData.push(tagStr);
     }
 
     makeTag(tagStr) {
-        const
-            div = document.createElement('div'),
-            span = document.createElement('span'),
-            img = document.createElement('img');
-        
+        const div = document.createElement('div');
+        const span = document.createElement('span');
+        const img = document.createElement('img');
+
         span.innerHTML = tagStr;
         img.src = this.CLOSE_SVG_PATH;
-        img.onclick = this.removeClickedTag;
-        
-        div.className = "tag-box";
+        img.onclick = this.removeClickedTag.bind(this);
 
+        div.className = 'tag-box';
         div.appendChild(span);
         div.appendChild(img);
 
-        const tagBoxes = this.tagElement.querySelectorAll(".tag-box");
+        const { length } = this.tagElement.querySelectorAll('.tag-box');
 
-        if( tagBoxes.length < 1 ) {
-            this.tagElement.insertAdjacentElement('afterbegin', div);
+        if (length < 1) {
+            this.tagElement.insertAdjacentElement('afterbegin', div); 
         } else {
-            this.tagInput.insertAdjacentElement('beforebegin', div);;
+            this.tagInput.insertAdjacentElement('beforebegin', div);
         }
     }
 

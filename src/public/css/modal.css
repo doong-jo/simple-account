@@ -22,7 +22,7 @@
     visibility: hidden;
     transform: scale(0.5);
     opacity: 0;
-    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+    transition: linear 0.25s, opacity 0.25s 0s, transform 0.25s;
 }
 
 .modal-container.visible {

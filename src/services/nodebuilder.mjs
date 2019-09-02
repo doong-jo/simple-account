@@ -1,11 +1,11 @@
 const NodeBuilder = {
     appendCSS: (name) => {
-        const link = document.createElement( "link" );
-        link.href = 'public/css/' + name + '.css';
-        link.type = "text/css";
-        link.rel = "stylesheet";
+        const link = document.createElement('link');
+        link.href = `public/css/${name}.css`;
+        link.type = 'text/css';
+        link.rel = 'stylesheet';
 
-        document.getElementsByTagName("head")[0].appendChild( link );
+        document.getElementsByTagName('head')[0].appendChild(link);
     },
 
     disalbeCSS: (title) => {
@@ -16,35 +16,38 @@ const NodeBuilder = {
         document.querySelector(`link[title=${title}]`).disabled = false;
     },
 
-    removeChildren(parent, cond = () => { return true; }) {
+    removeChildren(parent, cond = () => true) {
         const { children } = parent;
 
-        for(let i=children.length - 1; i >= 0; i--) {
-            if( cond(children[i]) ) { parent.removeChild(children[i]);  }
+        for (let i = children.length - 1; i >= 0; i--) {
+            if (cond(children[i])) { parent.removeChild(children[i]); }
         }
     },
 
     makeInput: (args) => {
-        const 
-            i = document.createElement("input"),
-            { inputType, nameAndId, placeholder,
-                value, disabled, maxLength } = args;
-    
+        const i = document.createElement('input');
+        const {
+            inputType, nameAndId, placeholder,
+            value, disabled, maxLength,
+        } = args;
+
         i.type = inputType;
-        i.name = i.id = nameAndId;
-        if( maxLength ) { i.maxLength = maxLength; }
-        
-        if (inputType !== 'checkbox') { i.placeholder = placeholder; } 
-        else {
+        i.name = nameAndId;
+        i.id = nameAndId;
+        if (maxLength) { i.maxLength = maxLength; }
+
+        if (inputType !== 'checkbox') {
+            i.placeholder = placeholder;
+        } else {
             i.value = value;
             i.disabled = disabled;
         }
-    
+
         return i;
     },
 
     makeLabel: (args) => {
-        const l = document.createElement("label");
+        const l = document.createElement('label');
 
         l.htmlFor = args.for;
         l.innerHTML = args.innerHTML;
@@ -53,17 +56,17 @@ const NodeBuilder = {
     },
 
     makeSelectAndOption: (args) => {
-        const 
-            s = document.createElement("select"),
-            { selectedInd, values, nameAndId } = args;
+        const s = document.createElement('select');
+        const { selectedInd, values, nameAndId } = args;
 
-        s.id = s.name = nameAndId;
-
+        s.id = nameAndId;
+        s.name = nameAndId;
         values.forEach((v, i) => {
-            const o = document.createElement("option");
-            o.value = o.innerHTML = v;
+            const o = document.createElement('option');
+            o.value = v;
+            o.innerHTML = v;
 
-            if( i === selectedInd ) { o.selected = true; }
+            if (i === selectedInd) { o.selected = true; }
 
             s.appendChild(o);
         });
@@ -72,56 +75,58 @@ const NodeBuilder = {
     },
 
     makeButton: (args) => {
-        const
-            btn = document.createElement('button'),
-            { text, doAction, className, disabled, attrType } = args;
+        const btn = document.createElement('button');
+        const {
+            text, doAction, className,
+            disabled, attrType,
+        } = args;
 
         btn.type = attrType;
         btn.innerHTML = text;
         btn.onclick = doAction;
-        btn.className = className || "";
+        btn.className = className || '';
         btn.disabled = disabled;
 
         return btn;
     },
 
-    makeElementByType: function() {
+    makeElementByType() {
         return {
-            'input' : this.makeInput,
-            'label' : this.makeLabel,
-            'select' : this.makeSelectAndOption,
-            'checkbox' : this.makeInput,
-            'button' : this.makeButton,
-        }
+            input: this.makeInput,
+            label: this.makeLabel,
+            select: this.makeSelectAndOption,
+            checkbox: this.makeInput,
+            button: this.makeButton,
+        };
     },
 
-    makeOptionsOfSelect: function(s, values) {
+    makeOptionsOfSelect(s, options) {
         this.removeChildren(s);
-        
-        for(const value of values) {
+
+        Object.values(options).forEach((v) => {
             const opt = document.createElement('option');
-            opt.value = opt.innerHTML = value;
-            
+            opt.value = v;
+            opt.innerHTML = v;
+
             s.appendChild(opt);
-        }
+        });
     },
 
-    makeSpan: function(args) {
-        const 
-            sp = document.createElement('span'), 
-            { 
-                className, innerHTML, onclick, 
-                textClassName, textOnClick, text,
-                underlined
-            } = args;
+    makeSpan(args) {
+        const sp = document.createElement('span');
+        const {
+            className, innerHTML, onclick,
+            textClassName, textOnClick, text,
+            underlined,
+        } = args;
+        const underlineStyle = 'text-decoration: underline; text-underline-position: under;';
         sp.className = textClassName || className;
         sp.innerHTML = text || innerHTML;
         sp.onclick = textOnClick || onclick;
-        sp.style = underlined ? 
-            'text-decoration: underline; text-underline-position: under;' : '';
+        sp.style = underlined ? underlineStyle : '';
 
         return sp;
-    }
+    },
 };
 
 export default NodeBuilder;

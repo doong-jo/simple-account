@@ -1,5 +1,72 @@
+/* eslint-disable import/extensions */
 import NodeBuilder from '../../services/nodebuilder.mjs';
 import TagList from './taglist.mjs';
+
+
+const FormWork = {
+    showValidation: (args, value) => {
+        const { result, failCase } = args.validator(value);
+        const { spanValidator, denySentence, successSentence } = args;
+        const classes = spanValidator.classList;
+        const addClass = result ? 'okay' : 'warning';
+        const rmClass = addClass === 'okay' ? 'warning' : 'okay';
+
+        if (value === '') {
+            classes.remove('okay');
+            classes.remove('warning');
+            return;
+        }
+
+        spanValidator.innerHTML = result ? successSentence : denySentence[failCase];
+
+        if (!classes.contains(addClass)) {
+            classes.remove(rmClass);
+            // restart animation, https://bit.ly/2UkQglI
+            // eslint-disable-next-line no-void
+            void spanValidator.offsetWidth;
+            classes.add(addClass);
+        }
+    },
+    addEventByType: (elem, args) => {
+        const { tagName } = elem;
+
+        if (tagName === 'INPUT' || tagName === 'SELECT') {
+            // eslint-disable-next-line no-use-before-define
+            elem.addEventListener('input', valueChangeListener(args));
+        }
+    },
+    makeSpanValidator: (args, itemElem) => {
+        const sp = NodeBuilder.makeSpan({
+            className: 'form-validator vertical-margin',
+            innerHTML: '&nbsp;',
+        });
+
+        itemElem.insertAdjacentElement('afterend', sp);
+        // eslint-disable-next-line no-param-reassign
+        args.spanValidator = sp;
+    },
+};
+
+function tagListListener(tagList, args) {
+    return (e) => {
+        if (!e.target.value.length) {
+            FormWork.showValidation(args, tagList.checkLength);
+        }
+    };
+}
+
+function valueChangeListener(args) {
+    return (e) => {
+        const { value } = e.target;
+        const { inputType, maxLength } = args;
+
+        if (inputType === 'number' || inputType === 'tel') {
+            e.target.value = value.slice(0, maxLength);
+        }
+
+        FormWork.showValidation(args, value);
+    };
+}
 
 class Form {
     constructor(id) {
@@ -10,146 +77,140 @@ class Form {
         this.itemEvents = {};
 
         this.makeElementOfType = {
-            'label' : (args) => {
+            label: (args) => {
                 const l = NodeBuilder.makeLabel(args);
                 this.formElement.appendChild(l);
             },
-    
-            'input' : (args) => {
+
+            input: (args) => {
                 const i = NodeBuilder.makeInput(args);
                 this.formElement.appendChild(i);
-                this.makeSpanValidator(args, i);
-                i.addEventListener('input', this.valueChangeListener(args));
+                FormWork.makeSpanValidator(args, i);
+                i.addEventListener('input', valueChangeListener(args));
             },
-    
-            'element-rows' : (args) => {
-                const 
-                    flexCotainerDiv = document.createElement("div"),
-                    { elements } = args;
-    
-                flexCotainerDiv.className = "form-inputs-container";
-                this.formElement.appendChild(flexCotainerDiv);
-                this.makeSpanValidator(args, flexCotainerDiv);
 
-                elements.forEach(eachArgs => {
-                    const 
-                        flexItemDiv = document.createElement("div"),
-                        elementBuilder = NodeBuilder.makeElementByType(),
-                        child = elementBuilder[eachArgs.type](eachArgs); 
-                        
+            'element-rows': (args) => {
+                const flexCotainerDiv = document.createElement('div');
+                const { elements } = args;
+
+                flexCotainerDiv.className = 'form-inputs-container';
+                this.formElement.appendChild(flexCotainerDiv);
+                FormWork.makeSpanValidator(args, flexCotainerDiv);
+
+                elements.forEach((eachArgs) => {
+                    const flexItemDiv = document.createElement('div');
+                    const elementBuilder = NodeBuilder.makeElementByType();
+                    const child = elementBuilder[eachArgs.type](eachArgs);
+
+                    // eslint-disable-next-line no-param-reassign
                     eachArgs.spanValidator = args.spanValidator;
-                    flexItemDiv.className = "form-flex-items";
+                    flexItemDiv.className = 'form-flex-items';
                     flexItemDiv.appendChild(child);
                     flexCotainerDiv.appendChild(flexItemDiv);
 
-                    this.addEventByType(child, eachArgs);
-                }); 
+                    FormWork.addEventByType(child, eachArgs);
+                });
             },
 
-            'button' : (args) => {
+            button: (args) => {
                 const b = NodeBuilder.makeButton(args);
                 this.formElement.appendChild(b);
             },
-    
-            'select' : (args) => {
+
+            select: (args) => {
                 const s = NodeBuilder.makeSelectAndOption(args);
                 this.formElement.appendChild(s);
-                this.makeSpanValidator(args, s);
+                FormWork.makeSpanValidator(args, s);
 
-                s.addEventListener('change', this.valueChangeListener(args));
+                s.addEventListener('change', valueChangeListener(args));
             },
-    
-            'checkboxWithText' : (args) => { 
-                const 
-                    div = document.createElement('div'),
-                    sp = NodeBuilder.makeSpan(args),
-                    chk = NodeBuilder.makeInput(args),
-                    { checkboxPos } = args;
 
-                div.className = "term vertical-margin";
-                const 
-                    checkboxPosAdjusting = {
-                        'left': () => {
-                            chk.style = "margin-right: 1em;";
-                            div.appendChild(chk);
-                            div.appendChild(sp);
-                        },
-                        'right': () => {
-                            chk.style = "margin-left: 1em;";
-                            div.appendChild(sp);
-                            div.appendChild(chk);
-                        }
+            checkboxWithText: (args) => { 
+                const div = document.createElement('div');
+                const sp = NodeBuilder.makeSpan(args);
+                const chk = NodeBuilder.makeInput(args);
+                const { checkboxPos } = args;
+
+                div.className = 'term vertical-margin';
+                const checkboxPosAdjusting = {
+                    left: () => {
+                        chk.style = 'margin-right: 1em;';
+                        div.appendChild(chk);
+                        div.appendChild(sp);
                     },
-                    pos = checkboxPos || right;
+                    right: () => {
+                        chk.style = 'margin-left: 1em;';
+                        div.appendChild(sp);
+                        div.appendChild(chk);
+                    },
+                };
+                const pos = checkboxPos || 'right';
 
                 checkboxPosAdjusting[pos]();
                 this.formElement.appendChild(div);
             },
 
-            'tag-list' : (args) => {
-                const
-                    { nameAndId, minTag } = args, 
-                    newTagList = new TagList(nameAndId, minTag);
+            'tag-list': (args) => {
+                const { nameAndId, minTag } = args;
+                const newTagList = new TagList(nameAndId, minTag);
                 this.formElement.appendChild(newTagList.element);
 
-                this.makeSpanValidator(args, newTagList.element);
+                FormWork.makeSpanValidator(args, newTagList.element);
                 newTagList.inputElem
-                    .addEventListener('focus', 
-                        this.tagListFocusListener(newTagList, args));
+                    .addEventListener('focus', tagListListener(newTagList, args));
 
                 newTagList.inputElem
-                    .addEventListener('input', 
-                        this.tagListInputChangeListener(newTagList, args));
+                    .addEventListener('input', tagListListener(newTagList, args));
 
                 this.tagList[nameAndId] = newTagList;
-            }
+            },
         };
 
         this.getValueOfEachType = {
-            'input': (elem) => {
+            input: (elem) => {
                 const { value } = this.formElement.querySelector(`#${elem.nameAndId}`);
-                return { 
-                    value, 
+                return {
+                    value,
                     denySentence: elem.denySentence,
                     id: elem.nameAndId,
                 };
             },
-            'select': (elem) => { // same function => input
+            select: (elem) => { // same function => input
                 const { value } = this.formElement.querySelector(`#${elem.nameAndId}`);
-                return { 
-                    value, 
+                return {
+                    value,
                     denySentence: elem.denySentence,
                     id: elem.nameAndId,
                 };
             },
-            'checkboxWithText': (elem) => {
+            checkboxWithText: (elem) => {
                 const { checked } = this.formElement.querySelector(`#${elem.nameAndId}`);
-                return { 
-                    value : checked, 
+                return {
+                    value: checked,
                     denySentence: elem.denySentence,
                     id: elem.nameAndId,
                 };
             },
             'element-rows': (rows) => {
                 const r = [];
-                rows.elements.forEach(elem => {
+                rows.elements.forEach((elem) => {
                     const { value } = document.querySelector(`#${elem.nameAndId}`);
                     r.push({
-                        value, denySentence: elem.denySentence,
-                        validator : elem.validator,
+                        value,
+                        denySentence: elem.denySentence,
+                        validator: elem.validator,
                         id: elem.nameAndId,
-                    })
+                    });
                 });
 
                 return r;
             },
             'tag-list': (elem) => {
-                const 
-                    tagList = this.tagList[elem.nameAndId],
-                    value = tagList.tags.length < tagList.minTag ? false : tagList.tags;
+                const tagList = this.tagList[elem.nameAndId];
+                const value = tagList.tags.length < tagList.minTag ? false : tagList.tags;
 
-                return { 
-                    value, 
+                return {
+                    value,
                     denySentence: elem.denySentence,
                     id: tagList.inputElem.id,
                 };
@@ -157,83 +218,12 @@ class Form {
         };
     }
 
-    showValidation(args, value) {
-        const 
-            { result, failCase } = args.validator(value),
-            { spanValidator, denySentence, successSentence } = args,
-            classes = spanValidator.classList,
-            addClass = result ? 'okay' : 'warning',
-            rmClass = addClass === 'okay' ? 'warning' : 'okay';
-
-        if( value === '' ) {
-            classes.remove('okay');
-            classes.remove('warning');
-            return;
-        }
-
-        spanValidator.innerHTML = result ?
-            successSentence : denySentence[failCase];
-
-        if( !classes.contains(addClass) ) {
-            classes.remove(rmClass);
-            // restart animation, https://bit.ly/2UkQglI
-            void spanValidator.offsetWidth;
-            classes.add(addClass);
-        }
-    }
-
-    addEventByType(elem, args) {
-        const { tagName } = elem;
-
-        if( tagName === 'INPUT' || tagName === 'SELECT') {
-            elem.addEventListener('input', this.valueChangeListener(args))
-        }
-    }
-
-    tagListFocusListener(tagList, args) {
-        return () => { this.showValidation(args, tagList.checkLength); };
-    }
-
-    tagListInputChangeListener(tagList, args) {
-        return (e) => {
-            if( !e.target.value.length ) { 
-                this.showValidation(args, tagList.checkLength); 
-            }
-        };
-    }
-
-    valueChangeListener(args) {
-        return (e) => {
-            const 
-                { value } = e.target,
-                { inputType, maxLength } = args;
-
-            if( inputType === 'number' || inputType === 'tel') {
-                e.target.value = value.slice(0, maxLength);
-            }
-
-            this.showValidation(args, value);
-        };
-    }
-
-    makeSpanValidator(args, itemElem) {
-        const sp = NodeBuilder.makeSpan({
-            className: 'form-validator vertical-margin',
-            innerHTML: '&nbsp;',
-        });
-        
-        itemElem.insertAdjacentElement('afterend', sp);
-        args.spanValidator = sp;
-    }
-
     build(formData) {
-        let tabInd = 1;
-        formData.forEach(itemData => {
-            itemData.tabIndex = tabInd++;
+        formData.forEach((itemData) => {
             this.makeElementOfType[itemData.type](itemData);
-            if( itemData.validator ) { 
+            if (itemData.validator) {
                 this.hasValidatorItems.push(itemData);
-             }
+            }
         });
 
         return this;
@@ -241,30 +231,35 @@ class Form {
 
     reset() {
         this.formElement.reset();
-
-        for(const tagListName in this.tagList) {
-            this.tagList[tagListName].reset();
+        const elems = this.formElement.querySelectorAll('.okay, .warning');
+        for (let i = 0; i < elems.length; i += 1) {
+            elems[i].classList.remove('okay');
+            elems[i].classList.remove('warning');
         }
+
+        Object.values(this.tagList).forEach((tagList) => {
+            tagList.reset();
+        });
     }
 
     validate() {
         const res = [];
-        this.hasValidatorItems.forEach(itemData => {
-            const 
-                valueforValidate = this.getValueOfEachType[itemData.type](itemData),
-                { nameAndId, validator } = itemData,
-                pushToRes = function (value, denySentence, validator, id) {
-                    const { result, failCase } = validator(value);
-                    res.push({
-                        result, denySentence : denySentence[failCase], id
-                    });
-                    this.formData[nameAndId] = value;
-                }.bind(this);
+        this.hasValidatorItems.forEach((itemData) => {
+            const valueforValidate = this.getValueOfEachType[itemData.type](itemData);
+            const { nameAndId, validator } = itemData;
+            const pushToRes = (value, denySentence, doValidate, id) => {
+                const { result, failCase } = doValidate(value);
+                res.push({
+                    result, denySentence: denySentence[failCase], id,
+                });
+                this.formData[nameAndId] = value;
+            };
 
-            if( valueforValidate.length ) {
-                valueforValidate.forEach(row => {
-                    const { value, denySentence = '', validator, id } = row;
-                    pushToRes(value, denySentence, validator, id);
+            if (valueforValidate.length) {
+                valueforValidate.forEach((row) => {
+                    const { value, denySentence = '', id } = row;
+                    const thisValidator = row.validator;
+                    pushToRes(value, denySentence, thisValidator, id);
                 });
             } else {
                 const { value, denySentence = '', id } = valueforValidate;
@@ -284,9 +279,8 @@ class Form {
     getValidateResult() {
         const validatedResultArr = this.validate();
 
-        let 
-            sentence = '',
-            focusId = '';
+        let sentence = '';
+        let focusId = '';
 
         validatedResultArr.some(v => {
             sentence = !v.result ? v.denySentence : '';
@@ -300,7 +294,7 @@ class Form {
     get denySentence() {
         const { sentence, focusId } = this.getValidateResult();
 
-        if( sentence.length ) {
+        if (sentence.length) {
             document.querySelector(`#${focusId}`).focus();
             document.querySelector(`#${focusId}`)
             return sentence;
