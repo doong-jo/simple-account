@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
-import NodeBuilder from '../../services/nodeBuilder.mjs';
+import NodeBuilder from '../../services/nodebuilder.mjs';
 
 class Modal {
     constructor(id, options = {}) {
@@ -10,7 +10,7 @@ class Modal {
     }
 
     makeModal(options) {
-        this.modalView = /*html*/`
+        this.modalView = /* html */`
             <div class="modal-title">
                 <span class="modal-title-text">${options.title}</span>
                 <img class="close" src="public/svg/close.svg" />
