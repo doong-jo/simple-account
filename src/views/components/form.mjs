@@ -1,56 +1,22 @@
 /* eslint-disable import/extensions */
 import NodeBuilder from '../../services/nodebuilder.mjs';
+import Util from '../../services/util.mjs';
+
 import TagList from './taglist.mjs';
 
+function addEventInputAndSelect(elem, args) {
+    const { tagName } = elem;
 
-const FormWork = {
-    showValidation: (args, value) => {
-        const { result, failCase } = args.validator(value);
-        const { spanValidator, denySentence, successSentence } = args;
-        const classes = spanValidator.classList;
-        const addClass = result ? 'okay' : 'warning';
-        const rmClass = addClass === 'okay' ? 'warning' : 'okay';
-
-        if (value === '') {
-            classes.remove('okay');
-            classes.remove('warning');
-            return;
-        }
-
-        spanValidator.innerHTML = result ? successSentence : denySentence[failCase];
-
-        if (!classes.contains(addClass)) {
-            classes.remove(rmClass);
-            // restart animation, https://bit.ly/2UkQglI
-            // eslint-disable-next-line no-void
-            void spanValidator.offsetWidth;
-            classes.add(addClass);
-        }
-    },
-    addEventByType: (elem, args) => {
-        const { tagName } = elem;
-
-        if (tagName === 'INPUT' || tagName === 'SELECT') {
-            // eslint-disable-next-line no-use-before-define
-            elem.addEventListener('input', valueChangeListener(args));
-        }
-    },
-    makeSpanValidator: (args, itemElem) => {
-        const sp = NodeBuilder.makeSpan({
-            className: 'form-validator vertical-margin',
-            innerHTML: '&nbsp;',
-        });
-
-        itemElem.insertAdjacentElement('afterend', sp);
-        // eslint-disable-next-line no-param-reassign
-        args.spanValidator = sp;
-    },
-};
+    if (tagName === 'INPUT' || tagName === 'SELECT') {
+        // eslint-disable-next-line no-use-before-define
+        elem.addEventListener('input', valueChangeListener(args));
+    }
+}
 
 function tagListListener(tagList, args) {
     return (e) => {
         if (!e.target.value.length) {
-            FormWork.showValidation(args, tagList.checkLength);
+            Util.showValidation(args, tagList.checkLength);
         }
     };
 }
@@ -64,7 +30,7 @@ function valueChangeListener(args) {
             e.target.value = value.slice(0, maxLength);
         }
 
-        FormWork.showValidation(args, value);
+        Util.showValidation(args, value);
     };
 }
 
@@ -85,7 +51,7 @@ class Form {
             input: (args) => {
                 const i = NodeBuilder.makeInput(args);
                 this.formElement.appendChild(i);
-                FormWork.makeSpanValidator(args, i);
+                NodeBuilder.makeSpanValidator(args, i);
                 i.addEventListener('input', valueChangeListener(args));
             },
 
@@ -95,7 +61,7 @@ class Form {
 
                 flexCotainerDiv.className = 'form-inputs-container';
                 this.formElement.appendChild(flexCotainerDiv);
-                FormWork.makeSpanValidator(args, flexCotainerDiv);
+                NodeBuilder.makeSpanValidator(args, flexCotainerDiv);
 
                 elements.forEach((eachArgs) => {
                     const flexItemDiv = document.createElement('div');
@@ -108,7 +74,7 @@ class Form {
                     flexItemDiv.appendChild(child);
                     flexCotainerDiv.appendChild(flexItemDiv);
 
-                    FormWork.addEventByType(child, eachArgs);
+                    addEventInputAndSelect(child, eachArgs);
                 });
             },
 
@@ -120,7 +86,7 @@ class Form {
             select: (args) => {
                 const s = NodeBuilder.makeSelectAndOption(args);
                 this.formElement.appendChild(s);
-                FormWork.makeSpanValidator(args, s);
+                NodeBuilder.makeSpanValidator(args, s);
 
                 s.addEventListener('change', valueChangeListener(args));
             },
@@ -155,7 +121,7 @@ class Form {
                 const newTagList = new TagList(nameAndId, minTag);
                 this.formElement.appendChild(newTagList.element);
 
-                FormWork.makeSpanValidator(args, newTagList.element);
+                NodeBuilder.makeSpanValidator(args, newTagList.element);
                 newTagList.inputElem
                     .addEventListener('focus', tagListListener(newTagList, args));
 
@@ -267,13 +233,15 @@ class Form {
             }
         });
 
+        console.log(this.formData);
+
         return res;
     }
 
     submit(serverUrl = '') {
-        // TODO : send to server 
+        // TODO : send to server and process response
         // data : this.formData
-        document.location.href = '/';
+        document.location.href = `?id=${this.formData.f_id}`;
     }
 
     getValidateResult() {
@@ -296,7 +264,6 @@ class Form {
 
         if (sentence.length) {
             document.querySelector(`#${focusId}`).focus();
-            document.querySelector(`#${focusId}`)
             return sentence;
         }
 

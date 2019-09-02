@@ -1,6 +1,7 @@
 const NodeBuilder = {
     appendCSS: (name) => {
         const link = document.createElement('link');
+        link.id = name;
         link.href = `public/css/${name}.css`;
         link.type = 'text/css';
         link.rel = 'stylesheet';
@@ -8,13 +9,18 @@ const NodeBuilder = {
         document.getElementsByTagName('head')[0].appendChild(link);
     },
 
-    disalbeCSS: (title) => {
-        document.querySelector(`link[title=${title}]`).disabled = true;
+    removeCSS: (id) => {
+        document.querySelector(`link[id=${id}]`).remove();
     },
 
-    enableCSS: (title) => {
-        document.querySelector(`link[title=${title}]`).disabled = false;
+    disalbeCSS: (id) => {
+        document.querySelector(`link[id=${id}]`).disabled = true;
     },
+
+    enableCSS: (id) => {
+        document.querySelector(`link[id=${id}]`).disabled = false;
+    },
+    
 
     removeChildren(parent, cond = () => true) {
         const { children } = parent;
@@ -37,7 +43,7 @@ const NodeBuilder = {
         if (maxLength) { i.maxLength = maxLength; }
 
         if (inputType !== 'checkbox') {
-            i.placeholder = placeholder;
+            i.placeholder = placeholder || '';
         } else {
             i.value = value;
             i.disabled = disabled;
@@ -124,6 +130,25 @@ const NodeBuilder = {
         sp.innerHTML = text || innerHTML;
         sp.onclick = textOnClick || onclick;
         sp.style = underlined ? underlineStyle : '';
+
+        return sp;
+    },
+
+    makeSpanValidator(args, parentElem) {
+        const sp = NodeBuilder.makeSpan({
+            className: 'form-validator vertical-margin',
+            innerHTML: '&nbsp;',
+        });
+
+        parentElem.insertAdjacentElement('afterend', sp);
+        // eslint-disable-next-line no-param-reassign
+        if (args.length) {
+            args.forEach((v) => {
+                v.spanValidator = sp;
+            });
+        } else {
+            args.spanValidator = sp;
+        }
 
         return sp;
     },

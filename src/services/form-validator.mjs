@@ -3,10 +3,9 @@ const getFailCase = (cases) => {
     let failData = {};
     let caseInd = 0;
     cases.some((caseFn) => {
+        result = caseFn();
         failData = { result, failCase: caseInd };
         caseInd += 1;
-
-        result = caseFn();
         return !result;
     });
 
@@ -94,7 +93,7 @@ const FormValidator = {
         const cases = [
             () => (/(^[a-zA-Z]+)@([a-z]+)\.([a-z]+$)/.test(value)),
         ];
-        
+
         return getFailCase(cases);
     },
 
