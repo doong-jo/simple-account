@@ -9,13 +9,22 @@ const routes = {
     '#signup': new Signup(),
 };
 
+let pageCssRemover;
+
 const router = async () => {
     const content = null || document.getElementById('page_container');
     const parsedURL = window.location.hash;
 
+    if (pageCssRemover) {
+        console.log('remove');
+        pageCssRemover();
+    }
+
     const page = routes[parsedURL] ? routes[parsedURL] : Error404;
     content.innerHTML = await page.render();
     await page.afterRender();
+
+    pageCssRemover = page.removeAllCSS;
 };
 
 window.addEventListener('load', router);
