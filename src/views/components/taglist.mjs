@@ -7,16 +7,18 @@ class TagList {
 
         this.tagElement = document.createElement('div');
         this.tagElement.className = 'tag-container vertical-margin';
-        this.tagElement.id = id;
+        this.tagElement.id = `${id}-list`;
         this.tagData = [];
         this.minTag = min;
 
-        this.init();
+        this.init(id);
     }
 
-    init() {
-        this.tagInput = document.createElement('input');
-        this.tagInput.type = 'text';
+    init(id) {
+        this.tagInput = NodeBuilder.makeInput({
+            inputType: 'text',
+            nameAndId: id,
+        });
 
         for (let i = 0; i < this.tagData.length; i += 1) {
             this.makeTag(this.tagData[i]);
@@ -56,7 +58,8 @@ class TagList {
 
     keyDownEvent(e) {
         const inp = e.key;
-        const { length, value } = this.tagInput;
+        const { value } = this.tagInput;
+        const { length } = this.tagData;
 
         if (inp === 'Backspace' && length > 0 && value === '') {
             this.removeLastTag();
