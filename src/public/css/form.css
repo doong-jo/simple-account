@@ -102,7 +102,6 @@
     display: block;
     font-weight: 500;
     visibility: hidden;
-    --shake-animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) forwards;
 }
 
 .form-validator.warning {

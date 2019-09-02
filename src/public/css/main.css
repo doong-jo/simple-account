@@ -24,6 +24,11 @@
     -webkit-text-fill-color: transparent;
 }
 
+.form-validator {
+    display: block;
+    margin: 0rem;
+}
+
 .main header {
     height: -webkit-fill-available !important;
     position: relative;
@@ -51,7 +56,6 @@
 
 .main header .container {
     position: relative;
-    z-index: 2;
 }
 
 .main header .overlay {
