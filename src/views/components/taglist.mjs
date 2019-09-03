@@ -97,6 +97,7 @@ class TagList {
 
         span.innerHTML = tagStr;
         img.src = this.CLOSE_SVG_PATH;
+        img.alt = 'close';
         img.onclick = this.removeClickedTag.bind(this);
 
         div.className = 'tag-box';

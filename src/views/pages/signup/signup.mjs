@@ -20,7 +20,7 @@ function buildSignupDenyModal() {
         content,
         footer: {
             cancleBtn: {
-                type: 'button',
+                attrType: 'button',
                 text: '확인',
             },
         },
@@ -158,6 +158,7 @@ class Signup {
             content,
             footer: {
                 confirmBtn: {
+                    attrType: 'button',
                     text: '동의',
                     className: 'agree',
                     disabled: true,
@@ -177,12 +178,12 @@ class Signup {
             content,
             footer: {
                 confirmBtn: {
-                    type: 'button',
+                    attrType: 'button',
                     text: '확인',
                     doAction: this.resetForm,
                 },
                 cancleBtn: {
-                    type: 'button',
+                    attrType: 'button',
                     text: '취소',
                 },
             },

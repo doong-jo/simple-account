@@ -69,7 +69,7 @@ const SignupFormData = (target) => [
         successSentence: '사용가능한 이름입니다.',
     }, {
         type: 'label',
-        for: 'f_birth',
+        for: 'f_birth_year',
         innerHTML: '생년월일',
     }, {
         type: 'element-rows',
@@ -81,7 +81,6 @@ const SignupFormData = (target) => [
                 nameAndId: 'f_birth_year',
                 nick: '출생연도',
                 placeholder: '년(4자)',
-                maxLength: 4,
                 validator: FormValidator.checkYearOfBirth,
                 denySentence: [
                     '태어난 년도 4자리를 정확하게 입력하세요.',

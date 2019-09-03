@@ -10,9 +10,6 @@ const SignupView = /* html */`
     </div>
     <div class="form-flex-items"></div>
 </div>
-<div id="term" class="modal-container"></div>
-<div id="reset" class="modal-container"></div>
-<div id="deny-signup" class="modal-container"></div>
 </section>
 `;
 

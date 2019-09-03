@@ -6,14 +6,19 @@ class Modal {
     constructor(id, options = {}) {
         this.options = options;
         this.elementId = id;
-        this.modalContainer = document.querySelector(`#${this.elementId}`);
+        // this.modalContainer = document.querySelector(`#${this.elementId}`);
+
+        this.modalContainer = document.createElement('div');
+        this.modalContainer.id = id;
+        this.modalContainer.className = 'modal-container';
+        document.body.appendChild(this.modalContainer);
     }
 
     makeModal(options) {
         this.modalView = /* html */`
             <div class="modal-title">
                 <span class="modal-title-text">${options.title}</span>
-                <img class="close" src="public/svg/close.svg" />
+                <img alt="close" class="close" src="public/svg/close.svg" />
             </div>
             <div class="modal-content"></div>
             <div class="modal-footer"></div>

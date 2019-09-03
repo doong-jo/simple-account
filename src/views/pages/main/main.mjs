@@ -14,7 +14,7 @@ const doLogin = () => {
     document.querySelector('.form-signin').innerHTML = '<h1>메인화면</h1>';
 
     const title = '로그인 성공';
-    const content = '<img src="public/img/cute_fox.jpg" />';
+    const content = '<img alt="fox" src="public/img/cute_fox.jpg" />';
     const signupDenyModal = new Modal('success-login');
     const options = {
         title,
@@ -97,9 +97,15 @@ class Main {
 
     makeListener() {
         const loginBtn = this.mainView.querySelector('#login');
+        const signupBtn = this.mainView.querySelector('#signup');
 
         loginBtn.addEventListener('click',
             validate(this.idValidator, this.pwValidator));
+
+        signupBtn.addEventListener('click',
+            () => {
+                document.location.href = './#signup';
+            });
     }
 
     removeAllCSS() {
