@@ -16,7 +16,6 @@ const router = async () => {
     const parsedURL = window.location.hash;
 
     if (pageCssRemover) {
-        console.log('remove');
         pageCssRemover();
     }
 

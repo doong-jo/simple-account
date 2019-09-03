@@ -233,8 +233,6 @@ class Form {
             }
         });
 
-        console.log(this.formData);
-
         return res;
     }
 
