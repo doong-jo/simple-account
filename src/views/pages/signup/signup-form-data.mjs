@@ -51,7 +51,7 @@ const SignupFormData = (target) => [
         maxLength: 16,
         placeholder: '비밀번호를 한번 더 입력해주세요.',
         validator: target.checkConfirmPw,
-        denySentence: [ '비밀번호가 일치하지 않습니다.'],
+        denySentence: ['비밀번호가 일치하지 않습니다.'],
         successSentence: '비밀번호가 일치합니다.',
     }, {
         type: 'label',
@@ -85,7 +85,7 @@ const SignupFormData = (target) => [
                 denySentence: [
                     '태어난 년도 4자리를 정확하게 입력하세요.',
                     '만 14세 이상만 가입 가능합니다.',
-                    '태어난 날짜를 다시 확인해주세요.'
+                    '태어난 날짜를 다시 확인해주세요.',
                 ],
                 successSentence: '&nbsp;',
             }, {

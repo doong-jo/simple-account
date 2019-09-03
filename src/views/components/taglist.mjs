@@ -31,9 +31,9 @@ class TagList {
     reset() {
         this.tagData = [];
 
-        NodeBuilder.removeChildren(this.tagElement, (child) => {
-            return child.tagName !== 'INPUT';
-        });
+        NodeBuilder.removeChildren(this.tagElement, (child) => (
+            child.tagName !== 'INPUT'
+        ));
     }
 
     registerEvents() {
@@ -107,7 +107,7 @@ class TagList {
         const { length } = this.tagElement.querySelectorAll('.tag-box');
 
         if (length < 1) {
-            this.tagElement.insertAdjacentElement('afterbegin', div); 
+            this.tagElement.insertAdjacentElement('afterbegin', div);
         } else {
             this.tagInput.insertAdjacentElement('beforebegin', div);
         }

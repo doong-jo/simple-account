@@ -29,7 +29,7 @@ const doLogin = () => {
     signupDenyModal.makeModal(options).toggle(true);
 };
 
-const validate = (idValidator, pwValidator) => ((e) => {
+const validate = (idValidator, pwValidator) => (() => {
     const idInputVal = document.querySelector('#f_id').value;
     const pwInputVal = document.querySelector('#f_pw').value;
 

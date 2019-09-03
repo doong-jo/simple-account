@@ -20,12 +20,12 @@ const NodeBuilder = {
     enableCSS: (id) => {
         document.querySelector(`link[id=${id}]`).disabled = false;
     },
-    
+
 
     removeChildren(parent, cond = () => true) {
         const { children } = parent;
 
-        for (let i = children.length - 1; i >= 0; i--) {
+        for (let i = children.length - 1; i >= 0; i -= 1) {
             if (cond(children[i])) { parent.removeChild(children[i]); }
         }
     },

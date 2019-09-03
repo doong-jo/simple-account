@@ -91,7 +91,7 @@ class Form {
                 s.addEventListener('change', valueChangeListener(args));
             },
 
-            checkboxWithText: (args) => { 
+            checkboxWithText: (args) => {
                 const div = document.createElement('div');
                 const sp = NodeBuilder.makeSpan(args);
                 const chk = NodeBuilder.makeInput(args);
@@ -250,7 +250,7 @@ class Form {
         let sentence = '';
         let focusId = '';
 
-        validatedResultArr.some(v => {
+        validatedResultArr.some((v) => {
             sentence = !v.result ? v.denySentence : '';
             focusId = v.id;
             return !v.result;
