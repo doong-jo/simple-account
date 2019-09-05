@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const logger = require('morgan');
 
 const app = express();
@@ -21,11 +22,14 @@ app.use(express.urlencoded({
     extended: false,
 }));
 app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(staticServe);
-app.use(notFoundHandler);
-app.use(serverInternalHandler);
 
 app.use('/', mainRouter);
+
+app.use(notFoundHandler);
+app.use(serverInternalHandler);
 
 app.listen(port, () => {
     console.log(`Listening ${port}...`);
