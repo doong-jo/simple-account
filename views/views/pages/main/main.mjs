@@ -2,42 +2,23 @@
 /* eslint-disable import/no-unresolved */
 import NodeBuilder from '../../../services/nodeBuilder.mjs';
 import FormValidator from '../../../services/form-validator.mjs';
+import Constants from '../../../services/constants.mjs';
 import Util from '../../../services/util.mjs';
-
-import Modal from '../../components/modal.mjs';
 
 import MainView from './main-html.mjs';
 
-const doLogin = () => {
+function doLogin(id, pwd) {
     // TODO : access server
-    // dumy
-    document.querySelector('.form-signin').innerHTML = '<h1>메인화면</h1>';
-
-    const title = '로그인 성공';
-    const content = '<img alt="fox" src="public/img/cute_fox.jpg" />';
-    const signupDenyModal = new Modal('success-login');
-    const options = {
-        title,
-        content,
-        footer: {
-            cancleBtn: {
-                type: 'button',
-                text: '확인',
-            },
-        },
+    const success = () => {
+        document.location.href = './#todo-main';
     };
-    signupDenyModal.makeModal(options).toggle(true);
-};
 
-const validate = (idValidator, pwValidator) => (() => {
-    const idInputVal = document.querySelector('#f_id').value;
-    const pwInputVal = document.querySelector('#f_pw').value;
+    const fail = () => {
+        alert('로그인에 실패했습니다.');
+    };
 
-    if (Util.showValidation(idValidator, idInputVal)
-        && Util.showValidation(pwValidator, pwInputVal)) {
-        doLogin();
-    }
-});
+    Util.getDataFormServer('POST', { id, pwd }, Constants.URL.LOGIN, success, fail);
+}
 
 class Main {
     constructor() {
@@ -59,26 +40,28 @@ class Main {
 
     async afterRender() {
         this.mainView = document.querySelector('.main');
-        const hasUser = this.realizeParameter();
+        this.idInput = document.querySelector('#f_id');
+        this.pwInput = document.querySelector('#f_pw');
 
-        if (hasUser) {
-            doLogin();
-        } else {
-            this.makeValidator();
-            NodeBuilder.makeSpanValidator(this.pwValidator,
-                this.mainView.querySelector('.validator'));
+        this.makeValidator();
+        NodeBuilder.makeSpanValidator(this.pwValidator,
+            this.mainView.querySelector('.validator'));
 
-            NodeBuilder.makeSpanValidator(this.idValidator,
-                this.mainView.querySelector('.validator'));
+        NodeBuilder.makeSpanValidator(this.idValidator,
+            this.mainView.querySelector('.validator'));
 
-            this.makeListener();
-        }
+        this.makeListener();
     }
 
-    realizeParameter() {
-        this.userId = Util.getUrlParameter('id');
+    validate(idValidator, pwValidator) {
+        return () => {
+            const { 0: idInputVal, 1: pwInputVal } = [this.idInput.value, this.pwInput.value];
 
-        return this.userId;
+            if (Util.showValidation(idValidator, idInputVal)
+                && Util.showValidation(pwValidator, pwInputVal)) {
+                doLogin(idInputVal, pwInputVal);
+            }
+        };
     }
 
     makeValidator() {
@@ -100,7 +83,7 @@ class Main {
         const signupBtn = this.mainView.querySelector('#signup');
 
         loginBtn.addEventListener('click',
-            validate(this.idValidator, this.pwValidator));
+            this.validate(this.idValidator, this.pwValidator));
 
         signupBtn.addEventListener('click',
             () => {

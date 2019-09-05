@@ -1,6 +1,7 @@
 /* eslint-disable import/extensions */
 import Util from '../../../services/util.mjs';
 import NodeBuilder from '../../../services/nodebuilder.mjs';
+import Constants from '../../../services/constants.mjs';
 import Form from '../../components/form.mjs';
 import Modal from '../../components/modal.mjs';
 
@@ -128,8 +129,17 @@ class Signup {
 
         this.validateForm = () => {
             const denyStr = this.signupForm.denySentence;
+
             if (denyStr === 'success') {
-                this.signupForm.submit(/* server url */);
+                const successFn = (formData) => {
+                    document.location.href = './#todo-main';
+                };
+        
+                const failFn = () => {
+                    alert('가입에 실패했습니다.');
+                };
+
+                this.signupForm.submit(Constants.URL.SIGNUP, successFn, failFn);
                 return;
             }
 

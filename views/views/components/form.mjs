@@ -34,6 +34,22 @@ function valueChangeListener(args) {
     };
 }
 
+function getrRefactedFormData(body) {
+    const birth = `${body.f_birth_year}-${body.f_birth_month}-${body.f_birth_day}`;
+    const data = {
+        id: body.f_id,
+        pwd: body.f_pw,
+        name: body.f_name,
+        birth,
+        sex: body.f_sex,
+        email: body.f_email,
+        phone: body.f_phone,
+        favorite: body.f_favorite,
+    };
+
+    return data;
+}
+
 class Form {
     constructor(id) {
         this.formElement = document.getElementById(id);
@@ -212,13 +228,13 @@ class Form {
         const res = [];
         this.hasValidatorItems.forEach((itemData) => {
             const valueforValidate = this.getValueOfEachType[itemData.type](itemData);
-            const { nameAndId, validator } = itemData;
+            const { validator } = itemData;
             const pushToRes = (value, denySentence, doValidate, id) => {
                 const { result, failCase } = doValidate(value);
                 res.push({
                     result, denySentence: denySentence[failCase], id,
                 });
-                this.formData[nameAndId] = value;
+                this.formData[id] = value;
             };
 
             if (valueforValidate.length) {
@@ -236,10 +252,12 @@ class Form {
         return res;
     }
 
-    submit(serverUrl = '') {
-        // TODO : send to server and process response
-        // data : this.formData
-        document.location.href = `?id=${this.formData.f_id}`;
+    submit(serverUrl = '', successFn, failFn) {
+        if (serverUrl === '') { return; }
+
+        Util.getDataFormServer('POST',
+            getrRefactedFormData(this.formData),
+            serverUrl, successFn(this.formData), failFn);
     }
 
     getValidateResult() {
