@@ -1,5 +1,6 @@
 /* eslint-disable import/extensions */
 import Main from './views/pages/main/main.mjs';
+import TodoMain from './views/pages/todo-main/todo-main.mjs';
 import Signup from './views/pages/signup/signup.mjs';
 import Error404 from './views/pages/error404.mjs';
 
@@ -7,6 +8,7 @@ import Error404 from './views/pages/error404.mjs';
 const routes = {
     '': new Main(),
     '#signup': new Signup(),
+    '#todo-main': new TodoMain(),
 };
 
 let pageCssRemover;
