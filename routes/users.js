@@ -1,8 +1,15 @@
 const express = require('express');
 
+const userAPI = require('./api/users');
+
 const router = express.Router();
 
-// const userAPI = 
+router.get('/list', (req, res) => {
+    userAPI.getList(req.body, {}, (result) => {
+        console.log(result);
+        res.json(result);
+    });
+});
 
 router.post('/login', (req, res) => {
     // TODO: 아이디와 비밀번호 일치 확인
@@ -24,6 +31,9 @@ router.post('/signup', (req, res) => {
     // TODO: 회원가입 API 연결
     console.log('route signup');
     console.log('data', req.body);
+    userAPI.create(req.body, (result) => {
+        res.json(result);
+    });
 
     res.send({ result: true });
 });

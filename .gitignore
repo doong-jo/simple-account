@@ -1,3 +1,6 @@
+# Config
+models/config.js
+
 # Logs
 logs
 *.log

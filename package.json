@@ -23,7 +23,7 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }  
+    }
   },
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
@@ -38,6 +38,7 @@
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
     "http-errors": "^1.7.3",
+    "mongoose": "^5.6.12",
     "morgan": "^1.9.1",
     "pug": "^2.0.4",
     "sequelize": "^5.18.1"
