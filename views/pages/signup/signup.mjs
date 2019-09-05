@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
-import Util from '../../../services/util.mjs';
-import NodeBuilder from '../../../services/nodebuilder.mjs';
-import Constants from '../../../services/constants.mjs';
+import Util from '../../services/util.mjs';
+import NodeBuilder from '../../services/nodebuilder.mjs';
+import Constants from '../../services/constants.mjs';
 import Form from '../../components/form.mjs';
 import Modal from '../../components/modal.mjs';
 

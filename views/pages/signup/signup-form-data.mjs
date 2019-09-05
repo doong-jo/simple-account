@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
-import FormValidator from '../../../services/form-validator.mjs';
-import Util from '../../../services/util.mjs';
+import FormValidator from '../../services/form-validator.mjs';
+import Util from '../../services/util.mjs';
 
 const SignupFormData = (target) => [
     {

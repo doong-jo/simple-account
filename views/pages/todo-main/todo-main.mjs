@@ -1,8 +1,8 @@
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
-import NodeBuilder from '../../../services/nodeBuilder.mjs';
-import Constants from '../../../services/constants.mjs';
-import Util from '../../../services/util.mjs';
+import NodeBuilder from '../../services/nodeBuilder.mjs';
+import Constants from '../../services/constants.mjs';
+import Util from '../../services/util.mjs';
 
 import Modal from '../../components/modal.mjs';
 

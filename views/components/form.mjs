@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
-import NodeBuilder from '../../services/nodebuilder.mjs';
-import Util from '../../services/util.mjs';
+import NodeBuilder from '../services/nodebuilder.mjs';
+import Util from '../services/util.mjs';
 
 import TagList from './taglist.mjs';
 
@@ -34,7 +34,7 @@ function valueChangeListener(args) {
     };
 }
 
-function getrRefactedFormData(body) {
+function getRefactedFormData(body) {
     const birth = `${body.f_birth_year}-${body.f_birth_month}-${body.f_birth_day}`;
     const data = {
         id: body.f_id,
@@ -256,7 +256,7 @@ class Form {
         if (serverUrl === '') { return; }
 
         Util.getDataFormServer('POST',
-            getrRefactedFormData(this.formData),
+            getRefactedFormData(this.formData),
             serverUrl, successFn(this.formData), failFn);
     }
 

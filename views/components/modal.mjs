@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
-import NodeBuilder from '../../services/nodebuilder.mjs';
+import NodeBuilder from '../services/nodebuilder.mjs';
 
 class Modal {
     constructor(id, options = {}) {

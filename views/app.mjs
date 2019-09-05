@@ -1,8 +1,8 @@
 /* eslint-disable import/extensions */
-import Main from './views/pages/main/main.mjs';
-import TodoMain from './views/pages/todo-main/todo-main.mjs';
-import Signup from './views/pages/signup/signup.mjs';
-import Error404 from './views/pages/error404.mjs';
+import Main from './pages/main/main.mjs';
+import TodoMain from './pages/todo-main/todo-main.mjs';
+import Signup from './pages/signup/signup.mjs';
+import Error404 from './pages/error404.mjs';
 
 // 참조 : https://dev.to/rishavs/making-a-single-page-app-in-ye-good-olde-js-es6-3eng
 const routes = {
