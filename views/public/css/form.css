@@ -37,7 +37,7 @@
     border-radius: 0px;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background: #fff url(/src/public/img/sel_arr.gif) 100% 50% no-repeat;
+    background: #fff url(/public/img/sel_arr.gif) 100% 50% no-repeat;
 }
 
 .form-container select:focus {
