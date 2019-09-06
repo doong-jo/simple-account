@@ -11,9 +11,9 @@ const serverInternalHandler = require('./util/serverInternalHandler');
 const mainRouter = require('./routes/routes');
 
 const port = 8090;
-const staticServe = express.static(path.join(__dirname, 'views'));
+const staticServe = express.static(path.join(__dirname, 'client'));
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'client'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
