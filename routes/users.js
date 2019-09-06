@@ -1,5 +1,9 @@
 const express = require('express');
+const short = require('short-uuid');
+
+const SessionManager = require('../services/session-manager');
 const userAPI = require('./api/users');
+
 const router = express.Router();
 
 router.get('/list', (req, res) => {
@@ -16,8 +20,16 @@ router.post('/login', (req, res) => {
     console.log('login info', { id, pwd });
 
     userAPI.getFindOne({ id, pwd }, {}, (findResult) => {
-        console.log('findResult', findResult);
         if (findResult) {
+            console.log(`user: ${id} => login successfully`);
+            const sid = short.generate();
+            res.cookie('sid', sid, {
+                maxAge: 24 * 3600000, // 24 hours
+            });
+
+            SessionManager.validate(sid, id);
+            SessionManager.showStatus();
+
             res.json(true);
             return;
         }
@@ -28,6 +40,9 @@ router.post('/login', (req, res) => {
 
 router.post('/logout', (req, res) => {
     console.log('route users/logout');
+    SessionManager.invalidate(req.cookies.sid);
+    SessionManager.showStatus();
+    res.clearCookie('sid');
 
     res.send({ result: true });
 });
