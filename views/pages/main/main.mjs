@@ -1,23 +1,28 @@
 /* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
-import NodeBuilder from '../../services/nodeBuilder.mjs';
+import NodeBuilder from '../../services/nodebuilder.mjs';
 import FormValidator from '../../services/form-validator.mjs';
 import Constants from '../../services/constants.mjs';
 import Util from '../../services/util.mjs';
 
 import MainView from './main-html.mjs';
 
+const MESSAGES = {
+    FAIL_LOGIN: '로그인에 실패했습니다.',
+    WRONG_ID: '올바르지 않은 아이디입니다.',
+    WRONG_PW: '올바르지 않은 비밀번호 입니다.',
+};
+
 function doLogin(id, pwd) {
     // TODO : access server
     const success = () => {
-        document.location.href = './#todo-main';
+        Util.goToPage(Constants.PAGE_HASH.TODO);
     };
 
     const fail = () => {
-        alert('로그인에 실패했습니다.');
+        alert(MESSAGES.FAIL_LOGIN);
     };
 
-    Util.getDataFormServer('POST', { id, pwd }, Constants.URL.LOGIN, success, fail);
+    Util.getDataFormServer('POST', { id, pwd }, Constants.REQUEST_URL.LOGIN, success, fail);
 }
 
 class Main {
@@ -57,8 +62,8 @@ class Main {
         return () => {
             const { 0: idInputVal, 1: pwInputVal } = [this.idInput.value, this.pwInput.value];
 
-            if (Util.showValidation(idValidator, idInputVal)
-                && Util.showValidation(pwValidator, pwInputVal)) {
+            if (FormValidator.showValidation(idValidator, idInputVal)
+                && FormValidator.showValidation(pwValidator, pwInputVal)) {
                 doLogin(idInputVal, pwInputVal);
             }
         };
@@ -87,7 +92,7 @@ class Main {
 
         signupBtn.addEventListener('click',
             () => {
-                document.location.href = './#signup';
+                Util.goToPage(Constants.PAGE_HASH.SIGNUP);
             });
     }
 

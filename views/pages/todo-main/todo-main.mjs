@@ -1,6 +1,5 @@
 /* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
-import NodeBuilder from '../../services/nodeBuilder.mjs';
+import NodeBuilder from '../../services/nodebuilder.mjs';
 import Constants from '../../services/constants.mjs';
 import Util from '../../services/util.mjs';
 
@@ -9,16 +8,15 @@ import Modal from '../../components/modal.mjs';
 import TodoMainView from './todo-main-html.mjs';
 
 function doLogout(id, pwd) {
-    // TODO : access server
     const success = () => {
-        document.location.href = '/';
+        Util.goToPage(Constants.PAGE_HASH.LOGIN);
     };
 
     const fail = () => {
         alert('로그아웃에 실패했습니다.');
     };
 
-    Util.getDataFormServer('POST', { id, pwd }, Constants.URL.LOGOUT, success, fail);
+    Util.getDataFormServer('POST', { id, pwd }, Constants.REQUEST_URL.LOGOUT, success, fail);
 }
 
 class TodoMain {

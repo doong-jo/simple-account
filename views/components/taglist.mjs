@@ -132,10 +132,6 @@ class TagList {
     get min() {
         return this.minTag;
     }
-
-    get checkLength() {
-        return this.tags.length >= this.min;
-    }
 }
 
 export default TagList;

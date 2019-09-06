@@ -156,9 +156,9 @@ const SignupFormData = (target) => [
     }, {
         type: 'tag-list',
         nameAndId: 'f_favorite',
+        minTag: target.MIN_FAVOR_NUM,
         nick: '관심사',
-        minTag: 3,
-        validator: FormValidator.checkTagList,
+        validator: target.checkFavoriteTagList,
         denySentence: ['3개 이상의 관심사를 입력하세요.'],
         successSentence: '&nbsp;',
     }, {
@@ -172,7 +172,7 @@ const SignupFormData = (target) => [
         textClassName: 'label-checkbox',
         disabled: true,
         nick: '약관',
-        validator: FormValidator.checkChkBox,
+        validator: target.checkTerm,
         denySentence: ['약관에 동의하셔야만 가입이 가능합니다.'],
         successSentence: '&nbsp;',
     }, {

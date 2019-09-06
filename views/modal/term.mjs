@@ -1,6 +1,6 @@
-const TermContent ={
+const TermContent = {
     title: '개인정보 수집 및 이용에 대한 안내',
-    content: /*html*/`
+    content: /* html */`
     <textarea>
 개인정보 수집 및 이용에 대한 안내
 
@@ -36,8 +36,7 @@ const TermContent ={
 보존 이유 : 통신비밀보호법
 보존 기간 : 3개월
     </textarea>
-`
-} 
+`,
+};
 
-
-export default TermContent
+export default TermContent;

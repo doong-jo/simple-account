@@ -1,25 +1,9 @@
 /* eslint-disable import/extensions */
 import NodeBuilder from '../services/nodebuilder.mjs';
 import Util from '../services/util.mjs';
+import FormValidator from '../services/form-validator.mjs';
 
 import TagList from './taglist.mjs';
-
-function addEventInputAndSelect(elem, args) {
-    const { tagName } = elem;
-
-    if (tagName === 'INPUT' || tagName === 'SELECT') {
-        // eslint-disable-next-line no-use-before-define
-        elem.addEventListener('input', valueChangeListener(args));
-    }
-}
-
-function tagListListener(tagList, args) {
-    return (e) => {
-        if (!e.target.value.length) {
-            Util.showValidation(args, tagList.checkLength);
-        }
-    };
-}
 
 function valueChangeListener(args) {
     return (e) => {
@@ -30,7 +14,23 @@ function valueChangeListener(args) {
             e.target.value = value.slice(0, maxLength);
         }
 
-        Util.showValidation(args, value);
+        FormValidator.showValidation(args, value);
+    };
+}
+
+function addEventInputAndSelect(elem, args) {
+    const { tagName } = elem;
+
+    if (tagName === 'INPUT' || tagName === 'SELECT') {
+        elem.addEventListener('input', valueChangeListener(args));
+    }
+}
+
+function tagListListener(tagList, args) {
+    return (e) => {
+        if (!e.target.value.length) {
+            FormValidator.showValidation(args, tagList.tags);
+        }
     };
 }
 
@@ -189,7 +189,7 @@ class Form {
             },
             'tag-list': (elem) => {
                 const tagList = this.tagList[elem.nameAndId];
-                const value = tagList.tags.length < tagList.minTag ? false : tagList.tags;
+                const value = tagList.tags;
 
                 return {
                     value,
@@ -227,16 +227,22 @@ class Form {
     validate() {
         const res = [];
         this.hasValidatorItems.forEach((itemData) => {
+            // 1. 유효성 검사를 위해 각 Form 항목의 값을 가져온다
             const valueforValidate = this.getValueOfEachType[itemData.type](itemData);
             const { validator } = itemData;
+
+            // 3. 유효성 검사의 결과들을 저장
             const pushToRes = (value, denySentence, doValidate, id) => {
                 const { result, failCase } = doValidate(value);
                 res.push({
                     result, denySentence: denySentence[failCase], id,
                 });
+
+                // 4. { id, value } 형태로 formData(form 전송 시 사용) 저장
                 this.formData[id] = value;
             };
 
+            // 2. 단일 항목과 여러 Element들이 있는 한 항목을 분기하여 처리
             if (valueforValidate.length) {
                 valueforValidate.forEach((row) => {
                     const { value, denySentence = '', id } = row;
@@ -257,7 +263,7 @@ class Form {
 
         Util.getDataFormServer('POST',
             getRefactedFormData(this.formData),
-            serverUrl, successFn(this.formData), failFn);
+            serverUrl, successFn, failFn);
     }
 
     getValidateResult() {

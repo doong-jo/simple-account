@@ -11,6 +11,7 @@ import DenySignupContent from '../../modal/deny-signup.mjs';
 import SignupFormData from './signup-form-data.mjs';
 
 import SignupView from './signup-html.mjs';
+import FormValidator from '../../services/form-validator.mjs';
 
 function buildSignupDenyModal() {
     const { title, content } = DenySignupContent;
@@ -31,9 +32,11 @@ function buildSignupDenyModal() {
 
 class Signup {
     constructor() {
-        this.includedCSS = ['signup', 'form', 'tag', 'modal'];
+        this.MIN_FAVOR_NUM = 3;
 
+        this.includedCSS = ['signup', 'form', 'tag', 'modal'];
         this.removeAllCSS = this.removeAllCSS.bind(this);
+        this.termRead = false;
     }
 
     async render() {
@@ -50,10 +53,8 @@ class Signup {
     }
 
     async afterRender() {
-        this.MIN_FAVOR_NUM = 3;
-        this.termRead = false;
-
         this.makeListners();
+        this.makeValidator();
 
         this.signupForm = this.buildSignupForm();
         this.termModal = this.buildTermModal();
@@ -92,7 +93,9 @@ class Signup {
 
         this.checkMonthOfBirth = () => {
             for (let day = 32; day >= 28; day -= 1) {
-                if (Util.validateDate(this.yearOfBirth.value, this.monthOfBirth.value, day)) {
+                if (FormValidator.validateDate(this.yearOfBirth.value,
+                    this.monthOfBirth.value,
+                    day)) {
                     const days = Util.makeNumberArray(1, day, '일');
                     NodeBuilder.makeOptionsOfSelect(this.dayOfBirth, days);
                     break;
@@ -131,21 +134,36 @@ class Signup {
             const denyStr = this.signupForm.denySentence;
 
             if (denyStr === 'success') {
-                const successFn = (formData) => {
-                    document.location.href = './#todo-main';
-                };
-        
-                const failFn = () => {
-                    alert('가입에 실패했습니다.');
-                };
-
-                this.signupForm.submit(Constants.URL.SIGNUP, successFn, failFn);
+                this.doSignup();
                 return;
             }
 
             this.signupDenyModal.toggle(true);
             this.denySpan.innerHTML = denyStr;
         };
+    }
+
+    doSignup() {
+        const successFn = () => {
+            Util.goToPage(Constants.PAGE_HASH.TODO);
+        };
+
+        const failFn = () => {
+            alert('가입에 실패했습니다.');
+        };
+
+        this.signupForm.submit(Constants.REQUEST_URL.SIGNUP, successFn, failFn);
+    }
+
+    makeValidator() {
+        this.checkFavoriteTagList = (tags) => {
+            const result = tags.length >= this.MIN_FAVOR_NUM;
+            return { result, failCase: 0 };
+        };
+
+        this.checkTerm = (checked) => (
+            { result: checked, failCase: 0 }
+        );
     }
 
     registerEvents() {
