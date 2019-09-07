@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import NodeBuilder from '../services/nodebuilder.mjs';
 
 class TagList {

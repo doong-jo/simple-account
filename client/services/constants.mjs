@@ -1,8 +1,11 @@
 const Constants = {
+    HOST: 'http://localhost:8090',
+    
     REQUEST_URL: {
-        LOGIN: '/users/login',
+        LOGIN: '/auth/login',
+        LOGOUT: '/auth/logout',
         SIGNUP: '/users/signup',
-        LOGOUT: '/users/logout',
+        EXIST: '/users/exists',
     },
 
     PAGE_HASH: {

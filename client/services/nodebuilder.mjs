@@ -10,7 +10,7 @@ const NodeBuilder = {
     },
 
     removeCSS: (id) => {
-        document.querySelector(`link[id=${id}]`).remove();
+        document.querySelector(`link[id=${id}]`).disabled = true;
     },
 
     disalbeCSS: (id) => {
@@ -142,7 +142,7 @@ const NodeBuilder = {
 
         parentElem.insertAdjacentElement('afterend', sp);
         // eslint-disable-next-line no-param-reassign
-        if (args.length) {
+        if (Array.isArray(args)) {
             args.forEach((v) => {
                 v.spanValidator = sp;
             });

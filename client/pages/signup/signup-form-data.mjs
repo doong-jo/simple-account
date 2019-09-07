@@ -14,10 +14,10 @@ const SignupFormData = (target) => [
         nick: '아이디',
         maxLength: 20,
         placeholder: '5~20자, 영 소문자, 숫자, (_, -)만 사용 가능',
-        validator: FormValidator.checkId,
+        validator: FormValidator.checkIdAndExists,
         denySentence: [
-            '이미 사용중인 아이디입니다.',
             '5~20자의 영문 소문자, 숫자와 특수기호(_)(-) 만 사용 가능합니다.',
+            '이미 사용중인 아이디입니다',
         ],
         successSentence: '사용 가능한 아이디입니다.',
     }, {

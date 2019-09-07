@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import NodeBuilder from '../services/nodebuilder.mjs';
 import Util from '../services/util.mjs';
 import FormValidator from '../services/form-validator.mjs';
@@ -6,7 +5,7 @@ import FormValidator from '../services/form-validator.mjs';
 import TagList from './taglist.mjs';
 
 function valueChangeListener(args) {
-    return (e) => {
+    return  Util.debounce((e) => {
         const { value } = e.target;
         const { inputType, maxLength } = args;
 
@@ -15,7 +14,7 @@ function valueChangeListener(args) {
         }
 
         FormValidator.showValidation(args, value);
-    };
+    }, 500);
 }
 
 function addEventInputAndSelect(elem, args) {
@@ -28,7 +27,7 @@ function addEventInputAndSelect(elem, args) {
 
 function tagListListener(tagList, args) {
     return (e) => {
-        if (!e.target.value.length) {
+        if (e.target.value === '') {
             FormValidator.showValidation(args, tagList.tags);
         }
     };
@@ -224,67 +223,64 @@ class Form {
         });
     }
 
-    validate() {
+    // 유효성 검사의 결과들을 저장
+    async validateEachItems(value, denySentence, doValidate, id) {
+        this.formData[id] = value;
+
+        const { result, failCase } = await doValidate(value);
+        return {
+            result, denySentence: denySentence[failCase], id
+        };
+    }
+
+    async validate() {
         const res = [];
-        this.hasValidatorItems.forEach((itemData) => {
+        // eslint-disable-next-line no-restricted-syntax
+        for (const itemData of this.hasValidatorItems) {
             // 1. 유효성 검사를 위해 각 Form 항목의 값을 가져온다
             const valueforValidate = this.getValueOfEachType[itemData.type](itemData);
             const { validator } = itemData;
 
-            // 3. 유효성 검사의 결과들을 저장
-            const pushToRes = (value, denySentence, doValidate, id) => {
-                const { result, failCase } = doValidate(value);
-                res.push({
-                    result, denySentence: denySentence[failCase], id,
-                });
-
-                // 4. { id, value } 형태로 formData(form 전송 시 사용) 저장
-                this.formData[id] = value;
-            };
-
             // 2. 단일 항목과 여러 Element들이 있는 한 항목을 분기하여 처리
-            if (valueforValidate.length) {
-                valueforValidate.forEach((row) => {
+            if (Array.isArray(valueforValidate)) {
+                valueforValidate.forEach(async (row) => {
                     const { value, denySentence = '', id } = row;
                     const thisValidator = row.validator;
-                    pushToRes(value, denySentence, thisValidator, id);
+                    // 3. { id, value } 형태로 formData(form 전송 시 사용) 저장
+                    res.push(await this.validateEachItems(value, denySentence, thisValidator, id));
                 });
             } else {
                 const { value, denySentence = '', id } = valueforValidate;
-                pushToRes(value, denySentence, validator, id);
+                res.push(await this.validateEachItems(value, denySentence, validator, id));
             }
-        });
+        }
 
         return res;
     }
 
-    submit(serverUrl = '', successFn, failFn) {
+    async submit(serverUrl = '', successFn, failFn) {
         if (serverUrl === '') { return; }
 
-        Util.getDataFormServer('POST',
+        await Util.requestServer('POST',
             getRefactedFormData(this.formData),
             serverUrl, successFn, failFn);
     }
 
-    getValidateResult() {
-        const validatedResultArr = this.validate();
+    async getValidateResult() {
+        const validatedResultArr = await this.validate();
 
         let sentence = '';
         let focusId = '';
 
+        console.log('validatedResultArr', validatedResultArr);
         validatedResultArr.some((v) => {
+            console.log('v', v);
             sentence = !v.result ? v.denySentence : '';
             focusId = v.id;
             return !v.result;
         });
 
-        return { sentence, focusId };
-    }
-
-    get denySentence() {
-        const { sentence, focusId } = this.getValidateResult();
-
-        if (sentence.length) {
+        if (sentence !== '') {
             document.querySelector(`#${focusId}`).focus();
             return sentence;
         }

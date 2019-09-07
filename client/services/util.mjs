@@ -1,3 +1,5 @@
+import _ from './constants.mjs';
+
 const Util = {
     makeNumberArray(min, max, first = 0) {
         const arr = [...Array(max + 1).keys()].slice(min);
@@ -16,26 +18,31 @@ const Util = {
             }, wait);
         };
     },
+    
+    async requestServer(method = 'GET', data = {}, url = '', fnSuccess = () => {}, fnFail = () => {}) {
+        let targetURL = url;
+        const fetchOptions = {};
+        fetchOptions.method = method;
+        fetchOptions.headers = { 'Content-Type': 'application/json' };
 
-    getDataFormServer(method = 'GET', data = {}, url = '', fnSuccess = () => {}, fnFail = () => {}) {
-        fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        }).then((res) => {
-            if (res.status === 200 || res.status === 201) {
-                res.json().then((json) => {
-                    if (json) {
-                        console.log(json);
-                        fnSuccess();
-                        return;
-                    }
-                    fnFail();
-                });
-            } else {
-                console.error(res.statusText);
-            }
-        }).catch((err) => console.error(err));
+        if (method === 'POST') { fetchOptions.body = JSON.stringify(data); }
+        else if (method === 'GET') {
+            const getMethodUrl = new URL(`${_.HOST}${targetURL}`);
+            getMethodUrl.search = new URLSearchParams(data);
+
+            targetURL = getMethodUrl;
+        }
+
+        const responseData = await fetch(targetURL, fetchOptions);
+        if (responseData.status === 200 || responseData.status === 201) {
+            const response = await responseData.json();
+            console.log('requestServer Response', response);
+            if (response) fnSuccess(response);
+            else fnFail(false);
+            
+        } else {
+            fnFail(false);
+        }
     },
 
     goToPage(hash) {

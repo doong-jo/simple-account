@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import NodeBuilder from '../services/nodebuilder.mjs';
 
 class Modal {
@@ -25,18 +24,19 @@ class Modal {
 
         this.modalContainer.insertAdjacentHTML('beforeend', this.modalView);
         this.closeBtn = this.modalContainer.querySelector('.close');
-
-        this.setSize(options.width, options.height);
+        const { width, height, top, content, footer} = options;
+        this.setSize(width, height, top);
         this.setCloseBtnEvent();
-        this.setContent(options.content);
-        this.setButtons(options.footer);
+        if (content) this.setContent(content);
+        if (footer) this.setButtons(footer);
+        
 
         return this;
     }
 
-    setSize(width, height) {
-        if (!width && !height) { return; }
-        this.modalContainer.style = `width : ${width}; height: ${height}`;
+    setSize(width, height, top) {
+        if (!width && !height && !top) { return; }
+        this.modalContainer.style = `width : ${width}; height: ${height}; top: ${top};`;
     }
 
     setCloseBtnEvent() {

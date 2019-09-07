@@ -1,24 +1,43 @@
-const getFailCase = (cases) => {
+import _ from './constants.mjs';
+import Util from './util.mjs';
+
+const getFailCase = async (cases) => {
     let result = false;
     let failData = {};
     let caseInd = 0;
-    cases.some((caseFn) => {
-        result = caseFn();
+    while(cases[caseInd]) {
+        result = await cases[caseInd]();
         failData = { result, failCase: caseInd };
-        caseInd += 1;
-        return !result;
-    });
 
-    return failData;
+        if( !result ) { break; }
+        caseInd += 1;
+    }
+
+    return new Promise((res) => { res(failData); });
 };
 
 const FormValidator = {
     validateDate(y, m, d) { return new Date(`${y}-${m}-${d}`).getDate() === d; },
 
     checkId(value) {
+        const cases = [
+            () => (/(^[a-z0-9_-]{5,20})$/.test(value)),
+        ];
+
+        return getFailCase(cases);
+    },
+
+    async checkIdAndExists(value) {
         // 5 ~ 20, 영 소문자, 숫자, 특수기호 '['_', '-']'
         const cases = [
             () => (/(^[a-z0-9_-]{5,20})$/.test(value)),
+            async () => {
+                return new Promise((res) => {
+                    Util.requestServer('GET', { id: value }, _.REQUEST_URL.EXIST,
+                    () => { res(false); }, 
+                    () => { res(true); });
+                });
+            },
         ];
 
         return getFailCase(cases);
@@ -106,22 +125,19 @@ const FormValidator = {
         return getFailCase(cases);
     },
 
-    showValidation(args, value) {
-        const { result, failCase } = args.validator(value);
-        const { spanValidator, denySentence, successSentence } = args;
+    async showValidation(args, value) {
+        const { validator, spanValidator, denySentence, successSentence } = args;
         const classes = spanValidator.classList;
+
+        const { result, failCase } = await validator(value);
+        
         const addClass = result ? 'okay' : 'warning';
-        const rmClass = addClass === 'okay' ? 'warning' : 'okay';
+        const rmClass = result ? 'warning' : 'okay';
 
         if (value === '') {
             classes.remove('okay');
             classes.remove('warning');
             return false;
-        }
-
-        let caseInd = failCase;
-        if (denySentence.length <= caseInd) {
-            caseInd = denySentence.length - 1;
         }
 
         if (!classes.contains(addClass)) {
@@ -132,14 +148,15 @@ const FormValidator = {
             classes.add(addClass);
         }
 
-        if (result) {
-            spanValidator.innerHTML = successSentence;
-            return true;
-        }
+        const caseInd = denySentence.length <= failCase ? 
+            denySentence.length - 1 : failCase;
 
-        spanValidator.innerHTML = denySentence[caseInd];
+        let selectedDenySentence = denySentence[caseInd];
 
-        return false;
+        spanValidator.innerHTML = result ? 
+            successSentence : selectedDenySentence;
+
+        return result;
     },
 };
 

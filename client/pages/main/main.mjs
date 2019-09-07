@@ -1,9 +1,7 @@
-/* eslint-disable import/extensions */
 import NodeBuilder from '../../services/nodebuilder.mjs';
 import FormValidator from '../../services/form-validator.mjs';
-import Constants from '../../services/constants.mjs';
+import _ from '../../services/constants.mjs';
 import Util from '../../services/util.mjs';
-
 import MainView from './main-html.mjs';
 
 const MESSAGES = {
@@ -12,31 +10,31 @@ const MESSAGES = {
     WRONG_PW: '올바르지 않은 비밀번호 입니다.',
 };
 
-function doLogin(id, pwd) {
+async function doLogin(id, pwd) {
     // TODO : access server
     const success = () => {
-        Util.goToPage(Constants.PAGE_HASH.TODO);
+        Util.goToPage(_.PAGE_HASH.TODO);
     };
 
     const fail = () => {
         alert(MESSAGES.FAIL_LOGIN);
     };
 
-    Util.getDataFormServer('POST', { id, pwd }, Constants.REQUEST_URL.LOGIN, success, fail);
+    await Util.requestServer('POST', { id, pwd }, _.REQUEST_URL.LOGIN, success, fail);
 }
 
 class Main {
     constructor() {
         this.includedCSS = ['main', 'form', 'modal'];
 
-        this.removeAllCSS = this.removeAllCSS.bind(this);
+        this.disableAllCSS = this.disableAllCSS.bind(this);
     }
 
     async render() {
         NodeBuilder.enableCSS('bootstrap');
 
         this.includedCSS.forEach((css) => {
-            NodeBuilder.appendCSS(css);
+            NodeBuilder.enableCSS(css);
         });
 
         this.view = MainView;
@@ -92,13 +90,13 @@ class Main {
 
         signupBtn.addEventListener('click',
             () => {
-                Util.goToPage(Constants.PAGE_HASH.SIGNUP);
+                Util.goToPage(_.PAGE_HASH.SIGNUP);
             });
     }
 
-    removeAllCSS() {
+    disableAllCSS() {
         this.includedCSS.forEach((cssName) => {
-            NodeBuilder.removeCSS(cssName);
+            NodeBuilder.disalbeCSS(cssName);
         });
     }
 }

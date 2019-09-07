@@ -1,7 +1,6 @@
-/* eslint-disable import/extensions */
 import Util from '../../services/util.mjs';
 import NodeBuilder from '../../services/nodebuilder.mjs';
-import Constants from '../../services/constants.mjs';
+import _ from '../../services/constants.mjs';
 import Form from '../../components/form.mjs';
 import Modal from '../../components/modal.mjs';
 
@@ -35,7 +34,7 @@ class Signup {
         this.MIN_FAVOR_NUM = 3;
 
         this.includedCSS = ['signup', 'form', 'tag', 'modal'];
-        this.removeAllCSS = this.removeAllCSS.bind(this);
+        this.disableAllCSS = this.disableAllCSS.bind(this);
         this.termRead = false;
     }
 
@@ -43,7 +42,7 @@ class Signup {
         NodeBuilder.disalbeCSS('bootstrap');
 
         this.includedCSS.forEach((css) => {
-            NodeBuilder.appendCSS(css);
+            NodeBuilder.enableCSS(css);
         });
 
         this.includedCSS = ['signup', 'form', 'tag', 'modal'];
@@ -62,6 +61,8 @@ class Signup {
         this.signupDenyModal = buildSignupDenyModal();
 
         this.signupFormContainer = this.signupForm.container;
+
+        this.idInput = this.signupFormContainer.querySelector('#f_id');
         this.pwInput = this.signupFormContainer.querySelector('#f_pw');
         this.pwConfirmInput = this.signupFormContainer.querySelector('#f_pw_confirm');
         this.yearOfBirth = this.signupFormContainer.querySelector('#f_birth_year');
@@ -130,11 +131,12 @@ class Signup {
             this.agreeBtn.disabled = true;
         };
 
-        this.validateForm = () => {
-            const denyStr = this.signupForm.denySentence;
+        this.validateForm = async () => {
+            const denyStr = await this.signupForm.getValidateResult();
 
             if (denyStr === 'success') {
-                this.doSignup();
+                const { 0: id, 1: pwd } = [ this.idInput.value, this.pwInput.value ];
+                this.doSignup(id, pwd);
                 return;
             }
 
@@ -143,16 +145,17 @@ class Signup {
         };
     }
 
-    doSignup() {
-        const successFn = () => {
-            Util.goToPage(Constants.PAGE_HASH.TODO);
-        };
+    async doSignup(id, pwd) {
+        async function successFn() {
+            await Util.requestServer('POST', { id, pwd }, _.REQUEST_URL.LOGIN);
+            Util.goToPage(_.PAGE_HASH.TODO);
+        }
 
-        const failFn = () => {
+        function failFn() {
             alert('가입에 실패했습니다.');
-        };
+        }
 
-        this.signupForm.submit(Constants.REQUEST_URL.SIGNUP, successFn, failFn);
+        await this.signupForm.submit(_.REQUEST_URL.SIGNUP, successFn, failFn);
     }
 
     makeValidator() {
@@ -219,9 +222,9 @@ class Signup {
         return resetModal.makeModal(options);
     }
 
-    removeAllCSS() {
+    disableAllCSS() {
         this.includedCSS.forEach((cssName) => {
-            NodeBuilder.removeCSS(cssName);
+            NodeBuilder.disalbeCSS(cssName);
         });
     }
 }
