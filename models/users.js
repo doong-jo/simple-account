@@ -1,12 +1,15 @@
 const db = require('./schema/user_info').getDB();
 const Validator = require('../services/validator');
+const _ = require('../services/constants');
+
+const bcrypt = require('bcrypt');
 
 function validateUserInfo(user) {
     const {
         id, pwd, name, birth, sex, email, phone, favorite,
     } = user;
     const splittedBirth = birth.split('-');
-    const result = (Validator.checkId(id)
+    const result = (Validator.checkIdAndExists(id)
         && Validator.checkPw(pwd)
         && Validator.checkName(name)
         && Validator.checkYearOfBirth(splittedBirth[0])
@@ -40,19 +43,21 @@ module.exports = {
                 if (err) {
                     console.error('users-findOne', err);
                     resultCallback(false);
-                } else { resultCallback(data); }
+                } else { resultCallback(data !== null); }
             });
     },
 
-    insert(snapshot, options, resultCallback) {
+    async insert(snapshot, options, resultCallback) {
         if (!validateUserInfo(snapshot)) {
             resultCallback(false);
             return;
         }
 
+        snapshot.pwd = await bcrypt.hash(snapshot.pwd, _.SALT_ROUNDS);
         const snapShot = new db.users(snapshot);
+
         snapShot.save((err) => {
-            if (err) { 
+            if (err) {
                 console.error('users-insert', err);
                 resultCallback(false);
             } else { resultCallback(true); }
