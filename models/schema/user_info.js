@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const mongooseSchema = require('mongoose').Schema;
 
-// mongo "mongodb+srv://boostcamp-hv6vm.mongodb.net/test" --username admin
 const mongooseCon = require('../connections');
 
 const userFields = {

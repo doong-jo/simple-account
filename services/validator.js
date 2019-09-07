@@ -11,10 +11,9 @@ const getValidateResult = (cases) => {
 module.exports = {
     validateDate(y, m, d) { return new Date(`${y}-${m}-${d}`).getDate() === d; },
 
-    checkId: (value) => {
+    checkIdAndExists: (value) => {
         // 5 ~ 20, 영 소문자, 숫자, 특수기호 '['_', '-']'
         const cases = [
-            // check exist id from server
             () => (/(^[a-z0-9_-]{5,20})$/.test(value)),
         ];
 
@@ -101,49 +100,5 @@ module.exports = {
         ];
 
         return getValidateResult(cases);
-    },
-
-    checkChkBox: (result) => (
-        { result, failCase: 0 }
-    ),
-
-    checkTagList: (result) => (
-        { result, failCase: 0 }
-    ),
-
-    showValidation(args, value) {
-        const { result, failCase } = args.validator(value);
-        const { spanValidator, denySentence, successSentence } = args;
-        const classes = spanValidator.classList;
-        const addClass = result ? 'okay' : 'warning';
-        const rmClass = addClass === 'okay' ? 'warning' : 'okay';
-
-        if (value === '') {
-            classes.remove('okay');
-            classes.remove('warning');
-            return false;
-        }
-
-        let caseInd = failCase;
-        if (denySentence.length <= caseInd) {
-            caseInd = denySentence.length - 1;
-        }
-
-        if (!classes.contains(addClass)) {
-            classes.remove(rmClass);
-            // restart animation, https://bit.ly/2UkQglI
-            // eslint-disable-next-line no-void
-            void spanValidator.offsetWidth;
-            classes.add(addClass);
-        }
-
-        if (result) {
-            spanValidator.innerHTML = successSentence;
-            return true;
-        }
-
-        spanValidator.innerHTML = denySentence[caseInd];
-
-        return false;
     },
 };
