@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const config = require('./config');
 const option = {
     socketTimeoutMS: 30000,
     keepAlive: true,
@@ -19,6 +18,6 @@ function createConnection(addr) {
     return mongoose.createConnection(addr, option);
 }
 
-module.exports = createConnection(config[config.default]);
+module.exports = createConnection(process.env.MONGODB_URI);
 
 module.exports.on = createConnection;
