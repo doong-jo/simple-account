@@ -9,6 +9,12 @@ const option = {
 
 mongoose.Promise = global.Promise;
 
+/**
+ * DB connection을 생성한다.
+ *
+ * @param {string} addr 연결 주소
+ * @returns {Connection} Connection 객체
+ */
 function createConnection(addr) {
     return mongoose.createConnection(addr, option);
 }

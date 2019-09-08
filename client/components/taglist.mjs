@@ -1,6 +1,17 @@
 import NodeBuilder from '../services/nodebuilder.mjs';
 
+/**
+ * 태그 리스트 클래스
+ *
+ * @class TagList
+ */
 class TagList {
+    /**
+     * 태그 리스트 생성자
+     * @param {string} id 태그 리스트 element id
+     * @param {number} min 태그 최솟값
+     * @memberof TagList
+     */
     constructor(id, min) {
         this.CLOSE_SVG_PATH = 'public/svg/close.svg';
 
@@ -13,6 +24,12 @@ class TagList {
         this.init(id);
     }
 
+    /**
+     * 태그 리스트 DOM 객체 생성
+     *
+     * @param {string} id 태그 리스트 element id
+     * @memberof TagList
+     */
     init(id) {
         this.tagInput = NodeBuilder.makeInput({
             inputType: 'text',
@@ -27,6 +44,11 @@ class TagList {
         this.registerEvents();
     }
 
+    /**
+     * 태그 초기화
+     *
+     * @memberof TagList
+     */
     reset() {
         this.tagData = [];
 
@@ -35,11 +57,25 @@ class TagList {
         ));
     }
 
+    /**
+     * 이벤트 리스느 설정
+     *
+     * @memberof TagList
+     */
     registerEvents() {
         this.tagInput.addEventListener('input', this.inputEvent.bind(this));
         this.tagInput.addEventListener('keydown', this.keyDownEvent.bind(this));
     }
 
+    /**
+     * 태그 리스트 내 입력상자 이벤트
+     * 태그 명 + ',' 입력 시 태그 생성
+     * 백스페이스 누를 시 태그 박스가 사라지고 태그가 수정가능한 상태로 전환
+     *
+     * @param {*} e
+     * @returns
+     * @memberof TagList
+     */
     inputEvent(e) {
         const inp = e.data;
         const { length, value } = this.tagInput;
@@ -55,6 +91,12 @@ class TagList {
         }
     }
 
+    /**
+     * 태그 리스트 내 입력상자 키 입력 이벤트
+     *
+     * @param {*} e event listner의 인자
+     * @memberof TagList
+     */
     keyDownEvent(e) {
         const inp = e.key;
         const { value } = this.tagInput;
@@ -66,6 +108,11 @@ class TagList {
         }
     }
 
+    /**
+     * 마지막 태그 삭제
+     *
+     * @memberof TagList
+     */
     removeLastTag() {
         this.tagInput.value = this.tagData.pop();
 
@@ -73,6 +120,12 @@ class TagList {
         tagBoxes[tagBoxes.length - 1].remove();
     }
 
+    /**
+     * 클릭한 태그 삭제
+     *
+     * @param {*} e
+     * @memberof TagList
+     */
     removeClickedTag(e) {
         const { parentElement } = e.target;
         const tagBoxes = this.tagElement.querySelectorAll('.tag-box');
@@ -82,6 +135,11 @@ class TagList {
         this.tagData.splice(idx, 1);
     }
 
+    /**
+     * 태그 추가
+     *
+     * @memberof TagList
+     */
     addTag() {
         const tagStr = this.tagInput.value.slice(0, -1);
 
@@ -89,6 +147,12 @@ class TagList {
         this.tagData.push(tagStr);
     }
 
+    /**
+     * 태그 생성
+     *
+     * @param {*} tagStr
+     * @memberof TagList
+     */
     makeTag(tagStr) {
         const div = document.createElement('div');
         const span = document.createElement('span');

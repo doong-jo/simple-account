@@ -1,10 +1,18 @@
 import NodeBuilder from '../services/nodebuilder.mjs';
 
+/**
+ * Modal을 생성하는 클래스
+ *
+ * @class Modal
+ */
 class Modal {
-    constructor(id, options = {}) {
-        this.options = options;
+    /**
+     * Modal 생성자로써 element id를 인자로 받아 element를 생성한다.
+     * @param {string} id 부여할 element id
+     * @memberof Modal
+     */
+    constructor(id) {
         this.elementId = id;
-        // this.modalContainer = document.querySelector(`#${this.elementId}`);
 
         this.modalContainer = document.createElement('div');
         this.modalContainer.id = id;
@@ -12,6 +20,16 @@ class Modal {
         document.body.appendChild(this.modalContainer);
     }
 
+    /**
+     * 구성정보를 options로 받아 Modal을 생성한다.
+     *
+     * @param {object} options 
+     * { width, height, top, content, footer } 
+     * footer: { cancleBtn,confirmBtn }
+     * 
+     * @returns {Modal} 대상 Modal 객체
+     * @memberof Modal
+     */
     makeModal(options) {
         this.modalView = /* html */`
             <div class="modal-title">
@@ -24,9 +42,12 @@ class Modal {
 
         this.modalContainer.insertAdjacentHTML('beforeend', this.modalView);
         this.closeBtn = this.modalContainer.querySelector('.close');
+        this.closeBtn.addEventListener('click', () => {
+            this.toggle(false);
+        });
+
         const { width, height, top, content, footer} = options;
         this.setSize(width, height, top);
-        this.setCloseBtnEvent();
         if (content) this.setContent(content);
         if (footer) this.setButtons(footer);
         
@@ -34,17 +55,25 @@ class Modal {
         return this;
     }
 
+    /**
+     * Modal의 사이즈를 결정한다.
+     *
+     * @param {string} width 너비 값(css의 단위 표현)
+     * @param {string} height 높이 값(css의 단위 표현)
+     * @param {string} top top 위치 값(css의 단위 표현)
+     * @memberof Modal
+     */
     setSize(width, height, top) {
         if (!width && !height && !top) { return; }
         this.modalContainer.style = `width : ${width}; height: ${height}; top: ${top};`;
     }
 
-    setCloseBtnEvent() {
-        this.closeBtn.addEventListener('click', () => {
-            this.toggle(false);
-        });
-    }
-
+    /**
+     * Modal을 보여주고 가려주는 기능을 수행한다.
+     *
+     * @param {boolean} trig Modal의 trigger
+     * @memberof Modal
+     */
     toggle(trig) {
         const mdContainerClasses = this.modalContainer.classList;
 
@@ -52,12 +81,24 @@ class Modal {
         mdContainerClasses.add(trig ? 'visible' : 'invisible');
     }
 
+    /**
+     * Modal의 내용을 설정한다
+     *
+     * @param {string} content html 값
+     * @memberof Modal
+     */
     setContent(content) {
         this.modalContainer
             .querySelector('.modal-content')
             .innerHTML = content;
     }
 
+    /**
+     * Modal 내 버튼 생성을 수행한다
+     *
+     * @param {object} footerOptions footer 버튼 정보
+     * @memberof Modal
+     */
     setButtons(footerOptions) {
         const footer = this.modalContainer.querySelector('.modal-footer');
 

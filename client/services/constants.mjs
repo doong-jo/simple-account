@@ -1,3 +1,7 @@
+/**
+ * 여러 파일에서 사용되는 상수 값들을 정의한다.
+ */
+
 const Constants = {
     HOST: 'http://localhost:8090',
     
@@ -6,6 +10,7 @@ const Constants = {
         LOGOUT: '/auth/logout',
         SIGNUP: '/users/signup',
         EXIST: '/users/exists',
+        PASSPORT: '/auth/passport',
     },
 
     PAGE_HASH: {

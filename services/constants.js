@@ -1,3 +1,7 @@
+/**
+ * 여러 파일에서 사용되는 상수 값들을 정의한다.
+ */
+
 const Constants = {
     COOKIE_AGE: 60000, // test 1min // 10min 600000
     COOKIE_SID_NAME: 'sid',

@@ -19,6 +19,7 @@ const router = async () => {
     const content = null || document.getElementById('page_container');
     const parsedURL = window.location.hash;
 
+    // 각 페이지에 맞는 렌더링을 수행한다.
     async function render() {
         if (toggleEachPageCSS) { toggleEachPageCSS(); }
 
@@ -29,23 +30,23 @@ const router = async () => {
         toggleEachPageCSS = page.disableAllCSS;
     }
 
+    // 이미 passport를 확인했다면 통과시킨다.
     if (alreadyAuth) {
         render();
         alreadyAuth = false;
         return;
     }
 
+    // passport가 필요한 페이지라면 검사한다.
     if (routes[parsedURL].auth) {
-        await Util.requestServer('POST', {}, '/auth/passport', render, () => {
+        await Util.requestServer('POST', {}, _.REQUEST_URL.PASSPORT, render, () => {
             document.location.href = _.PAGE_HASH.LOGIN;
         });
         return;
     }
 
-    await Util.requestServer('POST', {}, '/auth/passport', () => {
-        document.location.href = _.PAGE_HASH.TODO;
-        alreadyAuth = true;
-    }, render);
+    // passport 검사가 필요하지 않다면 그대로 렌더링한다.
+    render();
 };
 
 window.addEventListener('load', router);

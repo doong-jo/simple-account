@@ -1,5 +1,10 @@
 const NodeBuilder = {
-    appendCSS: (name) => {
+    /**
+     * css를 head안에 추가한다.
+     *
+     * @param {string} id 추가될 css id
+     */
+    appendCSS(id) {
         const link = document.createElement('link');
         link.id = name;
         link.href = `public/css/${name}.css`;
@@ -9,19 +14,41 @@ const NodeBuilder = {
         document.getElementsByTagName('head')[0].appendChild(link);
     },
 
-    removeCSS: (id) => {
+    /**
+     * css를 삭제한다
+     *
+     * @param {string} id 삭제될 css id
+     */
+    removeCSS(id) {
         document.querySelector(`link[id=${id}]`).disabled = true;
     },
 
-    disalbeCSS: (id) => {
+    /**
+     * css를 disabled 상태로 만든다.
+     *
+     * @param {string} id disabled될 css id
+     */
+    disalbeCSS(id) {
         document.querySelector(`link[id=${id}]`).disabled = true;
     },
 
-    enableCSS: (id) => {
+    /**
+     * css를 enable 상태로 만든다.
+     * : diabled를 false로 변경
+     *
+     * @param {string} id enabled될 css id
+     */
+    enableCSS(id)  {
         document.querySelector(`link[id=${id}]`).disabled = false;
     },
 
 
+    /**
+     * 모든 child를 삭제한다
+     *
+     * @param {Element} parent 부모 element
+     * @param {boolean} [cond=() => true] 삭제할 조건
+     */
     removeChildren(parent, cond = () => true) {
         const { children } = parent;
 
@@ -30,7 +57,16 @@ const NodeBuilder = {
         }
     },
 
-    makeInput: (args) => {
+    /**
+     * Input element를 생성한다.
+     *
+     * @param {object} args {
+            inputType, nameAndId, placeholder,
+            value, disabled, maxLength
+        } 가 사용된다.
+     * @returns {Element} 생성된 Element
+     */
+    makeInput(args) {
         const i = document.createElement('input');
         const {
             inputType, nameAndId, placeholder,
@@ -52,7 +88,15 @@ const NodeBuilder = {
         return i;
     },
 
-    makeLabel: (args) => {
+    /**
+     * Label element를 생성한다.
+     *
+     * @param {object} args {
+            for, innerHTML
+        } 가 사용된다.
+     * @returns {Element} 생성된 Element
+     */
+    makeLabel(args) {
         const l = document.createElement('label');
 
         l.htmlFor = args.for;
@@ -61,7 +105,15 @@ const NodeBuilder = {
         return l;
     },
 
-    makeSelectAndOption: (args) => {
+    /**
+     * Select, Option element를 생성한다.
+     *
+     * @param {object} args {
+            selectedInd, values, nameAndId
+        } 가 사용된다.
+     * @returns {Element} 생성된 Element
+     */
+    makeSelectAndOption(args) {
         const s = document.createElement('select');
         const { selectedInd, values, nameAndId } = args;
 
@@ -80,7 +132,16 @@ const NodeBuilder = {
         return s;
     },
 
-    makeButton: (args) => {
+    /**
+     * Button element를 생성한다.
+     *
+     * @param {object} args {
+            text, doAction, className,
+            disabled, attrType
+        } 가 사용된다.
+     * @returns {Element} 생성된 Element
+     */
+    makeButton(args) {
         const btn = document.createElement('button');
         const {
             text, doAction, className,
@@ -96,16 +157,13 @@ const NodeBuilder = {
         return btn;
     },
 
-    makeElementByType() {
-        return {
-            input: this.makeInput,
-            label: this.makeLabel,
-            select: this.makeSelectAndOption,
-            checkbox: this.makeInput,
-            button: this.makeButton,
-        };
-    },
-
+    /**
+     * Option element를 replace 한다.
+     *
+     * @param {object} s 부모 Select Element
+     * @param {array} options [{value, innerHTML}] 형식으로써 생성될 option 값들
+     * @returns {Element} 생성된 Element
+     */
     makeOptionsOfSelect(s, options) {
         this.removeChildren(s);
 
@@ -118,6 +176,16 @@ const NodeBuilder = {
         });
     },
 
+    /**
+     * Span element를 생성한다.
+     *
+     * @param {object} args {
+            className, innerHTML, onclick,
+            textClassName, textOnClick, text,
+            underlined
+        } 가 사용된다.
+     * @returns {Element} 생성된 Element
+     */
     makeSpan(args) {
         const sp = document.createElement('span');
         const {
@@ -134,6 +202,29 @@ const NodeBuilder = {
         return sp;
     },
 
+    /**
+     * 각 element 생성에 사용되는 함수들을 반환한다.
+     *
+     * @returns {object} [오브젝트이름, 오브젝트 생성함수]
+     */
+    makeElementByType() {
+        return {
+            input: this.makeInput,
+            label: this.makeLabel,
+            select: this.makeSelectAndOption,
+            checkbox: this.makeInput,
+            button: this.makeButton,
+        };
+    },
+
+    /**
+     * validation을 표시하는 span을 생성한다.
+     * args에 spanValidator속성을 추가하고 element를 대입한다.
+     *
+     * @param {*} args 생성될 args
+     * @param {*} parentElem validation 대상이 되는 element
+     * @returns {Element} SpanValidator
+     */
     makeSpanValidator(args, parentElem) {
         const sp = NodeBuilder.makeSpan({
             className: 'form-validator vertical-margin',

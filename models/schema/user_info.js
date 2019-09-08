@@ -1,6 +1,4 @@
-const mongoose = require('mongoose');
 const mongooseSchema = require('mongoose').Schema;
-
 const mongooseCon = require('../connections');
 
 const userFields = {
@@ -19,11 +17,4 @@ const userSchema = new mongooseSchema(userFields, {
     bufferCommands: false,
 });
 
-const db = {
-    users: mongooseCon.model('users', userSchema),
-};
-
-module.exports = {
-    getDB: () => db,
-    getFields: () => userFields,
-};
+module.exports = mongooseCon.model('users', userSchema);
