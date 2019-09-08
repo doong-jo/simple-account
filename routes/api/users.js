@@ -27,23 +27,41 @@ function validateUserInfo(user) {
 
 module.exports = {
     async create(snapshot, options) {
-        if (!validateUserInfo(snapshot)) {
-            return false;
-        }
+        try {
+            if (!validateUserInfo(snapshot)) {
+                return false;
+            }
 
-        snapshot.pwd = await bcrypt.hash(snapshot.pwd, _.SALT_ROUNDS);
-        return userModel.insert(snapshot, options);
+            snapshot.pwd = await bcrypt.hash(snapshot.pwd, _.SALT_ROUNDS);
+            return userModel.insert(snapshot, options);
+        } catch(err) {
+            console.error('users -> create', e);
+        }
+        
     },
 
     list(query, projection, options) {
-        return userModel.find(query, projection, options);
+        try {
+            return userModel.find(query, projection, options);
+        } catch(err) {
+            console.error('users -> list', e);
+        }
     },
 
     findOne(query, projection, options) {
-        return userModel.findOne(query, projection, options);
+        try {
+            return userModel.findOne(query, projection, options);
+        } catch(err) {
+            console.error('users -> findOne', e);
+        }
+        
     },
 
     count(query) {
-        return userModel.count(query);
+        try {
+            return userModel.count(query);
+        } catch(err) {
+            console.error('users -> count', e);
+        }
     },
 };
