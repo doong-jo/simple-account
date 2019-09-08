@@ -4,35 +4,29 @@ const userAPI = require('./api/users');
 
 const router = express.Router();
 
-function checkExists(req, res, next) {
-    const { id } = req.body;
-    userAPI.getFindOne({ id }, {}, (findResult) => {
-        if (findResult) {
-            res.json(findResult);
-            return;
-        }
-        next();
-    });
+async function checkExists(req, res, next) {
+    const getId ={
+        GET: req.query,
+        POST: req.body,
+    };
+    const { id } = getId[req.method];
+    res.exists = Boolean(await userAPI.count({ id }));
+
+    next();
 }
 
-router.get('/exists', (req, res) => {
-    console.log('route users/exist');
-    const { id } = req.query;
-    console.log('id', id);
-    userAPI.getFindOne({ id }, {}, (result) => {
-        console.log(result);
-        res.json(result);
-    });
+router.get('/exists', checkExists, (req, res) => {
+    res.json(res.exists);
 });
 
 router.post('/signup', checkExists, async (req, res) => {
-    console.log('route users/signup');
-    console.log('data', req.body);
+    if (res.exists) {
+        res.json(false);
+        return;
+    }
 
-    await userAPI.create(req.body, {}, (createResult) => {
-        console.log('createResult', createResult);
-        res.json(createResult);
-    });
+    const createResult = await userAPI.create(req.body, {});
+    res.json(createResult);
 });
 
 module.exports = router;

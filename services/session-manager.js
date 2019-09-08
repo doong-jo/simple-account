@@ -9,8 +9,6 @@ class SessionManager {
         this.map.set(sid, {
             userId,
             timeout: setTimeout(() => {
-                console.log('------------------session-manager expire---------------');
-                console.log('expire sid', sid);
                 this.map.delete(sid);
                 this.showStatus();
             }, _.SESSION_AGE),
@@ -18,21 +16,23 @@ class SessionManager {
     }
 
     invalidate(sid) {
-        this.map.delete(sid);
+        const session = this.map.get(sid);
+        if( session ) {
+            clearTimeout(session.timeout);
+            this.map.delete(sid);
+            this.showStatus();
+        }
     }
 
     maintain(sid) {
-        console.log('------------------session-manager maintain---------------');
-        const getObject = this.map.get(sid);
+        const session = this.map.get(sid);
 
         this.showStatus();
 
-        clearTimeout(getObject.timeout);
+        clearTimeout(session.timeout);
         this.map.set(sid, {
-            userId: getObject.userId,
+            userId: session.userId,
             timeout: setTimeout(() => {
-                console.log('------------------session-manager expire---------------');
-                console.log('expire sid', sid);
                 this.map.delete(sid);
                 this.showStatus();
             }, _.SESSION_AGE),
@@ -41,8 +41,8 @@ class SessionManager {
 
     showStatus() {
         const tableData = [];
-        this.map.forEach((value, key) => {
-            tableData.push({ sid: key, userId: value });
+        this.map.forEach((session, key) => {
+            tableData.push({ sid: key, userId: session.userId });
         });
         console.table(tableData);
     }

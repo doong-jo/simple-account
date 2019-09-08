@@ -11,7 +11,7 @@ const getValidateResult = (cases) => {
 module.exports = {
     validateDate(y, m, d) { return new Date(`${y}-${m}-${d}`).getDate() === d; },
 
-    checkIdAndExists: (value) => {
+    checkId: (value) => {
         // 5 ~ 20, 영 소문자, 숫자, 특수기호 '['_', '-']'
         const cases = [
             () => (/(^[a-z0-9_-]{5,20})$/.test(value)),
