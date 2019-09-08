@@ -21,7 +21,7 @@ async function doLogout(id, pwd) {
 
 class TodoMain {
     constructor() {
-        this.includedCSS = ['main', 'form', 'modal'];
+        this.includedCSS = ['todo-main', 'modal'];
 
         this.removeAllCSS = this.removeAllCSS.bind(this);
     }

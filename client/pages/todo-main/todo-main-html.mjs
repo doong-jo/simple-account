@@ -7,7 +7,7 @@ const TodoMainView = /* html */`
         </video>
 
         <div class="container h-100; text-white">
-            <div class="form-signin">
+            <div class="todo-main">
                 <h1>메인화면</h1>
                 <button id="logout" class="btn btn-lg btn-primary btn-block" type="button">로그아웃</button>
             </div>

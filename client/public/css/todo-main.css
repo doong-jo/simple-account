@@ -1,0 +1,15 @@
+.todo-main {
+    max-width: 20rem;
+    height: min-content;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 10rem;
+    bottom: 0;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#logout {
+    margin-top: 10rem;
+}
