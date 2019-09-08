@@ -11,7 +11,6 @@ const MESSAGES = {
 };
 
 async function doLogin(id, pwd) {
-    // TODO : access server
     const success = () => {
         Util.goToPage(_.PAGE_HASH.TODO);
     };
@@ -25,7 +24,7 @@ async function doLogin(id, pwd) {
 
 class Main {
     constructor() {
-        this.includedCSS = ['main', 'form', 'modal'];
+        this.includedCSS = ['main', 'form'];
 
         this.disableAllCSS = this.disableAllCSS.bind(this);
     }
