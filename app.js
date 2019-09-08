@@ -31,7 +31,7 @@ app.use('/', mainRouter);
 app.use(notFoundHandler);
 app.use(serverInternalHandler);
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
     console.log(`Listening ${port}...`);
 });
 
