@@ -6,8 +6,8 @@ const NodeBuilder = {
      */
     appendCSS(id) {
         const link = document.createElement('link');
-        link.id = name;
-        link.href = `public/css/${name}.css`;
+        link.id = id;
+        link.href = `public/css/${id}.css`;
         link.type = 'text/css';
         link.rel = 'stylesheet';
 
