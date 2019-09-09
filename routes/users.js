@@ -17,25 +17,37 @@ async function checkExists(req, res, next) {
         POST: req.body,
     };
     const { id } = getId[req.method];
-    res.exists = Boolean(await userAPI.count({ id }));
+    const exists = Boolean(await userAPI.count({ id }));
 
+    if (req.route.path === '/exists') { 
+        res.json(exists);
+        return;
+    }
+    res.exists = exists;
     next();
 }
 
-// 사용자의 존재 유무를 반환
-router.get('/exists', checkExists, (req, res) => {
-    res.json(res.exists);
-});
-
-// 사용자의 존재 유무를 검사 -> 회원가입을 API를 호출
-router.post('/signup', checkExists, async (req, res) => {
+/**
+ * 회원가입을 수행한다.
+ *
+ * @param {Request} req express requset
+ * @param {Response} res express response
+ * @returns
+ */
+async function doSignup(req, res) {
     if (res.exists) {
         res.json(false);
         return;
     }
 
     const createResult = await userAPI.create(req.body, {});
-    res.json(createResult);
-});
+    res.json(createResult !== undefined);
+}
+
+// 사용자의 존재 유무를 반환
+router.get('/exists', checkExists);
+
+// 사용자의 존재 유무를 검사 -> 회원가입을 API를 호출
+router.post('/signup', checkExists, doSignup);
 
 module.exports = router;
