@@ -3,7 +3,7 @@
  */
 
 const Constants = {
-    HOST: 'http://localhost:8090',
+    HOST: `https://${document.location.hostname}`,
     
     REQUEST_URL: {
         LOGIN: '/auth/login',
