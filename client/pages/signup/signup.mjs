@@ -12,23 +12,6 @@ import SignupFormData from './signup-form-data.mjs';
 import SignupView from './signup-html.mjs';
 import FormValidator from '../../services/form-validator.mjs';
 
-function buildSignupDenyModal() {
-    const { title, content } = DenySignupContent;
-    const signupDenyModal = new Modal('deny-signup');
-    const options = {
-        width: '30rem',
-        title,
-        content,
-        footer: {
-            cancleBtn: {
-                attrType: 'button',
-                text: '확인',
-            },
-        },
-    };
-    return signupDenyModal.makeModal(options);
-}
-
 class Signup {
     constructor() {
         this.MIN_FAVOR_NUM = 3;
@@ -55,10 +38,11 @@ class Signup {
         this.makeListners();
         this.makeValidator();
 
+        this.signupPage = document.querySelector('.signup');
         this.signupForm = this.buildSignupForm();
         this.termModal = this.buildTermModal();
         this.resetModal = this.buildResetModal();
-        this.signupDenyModal = buildSignupDenyModal();
+        this.signupDenyModal = this.buildSignupDenyModal();
 
         this.signupFormContainer = this.signupForm.container;
 
@@ -181,7 +165,7 @@ class Signup {
 
     buildTermModal() {
         const { title, content } = TermContent;
-        const termModal = new Modal('term');
+        const termModal = new Modal(this.signupPage, 'term');
         const options = {
             width: '40rem',
             height: '30rem',
@@ -202,7 +186,7 @@ class Signup {
 
     buildResetModal() {
         const { title, content } = ResetContent;
-        const resetModal = new Modal('reset');
+        const resetModal = new Modal(this.signupPage, 'reset');
         const options = {
             width: '30rem',
             title,
@@ -220,6 +204,23 @@ class Signup {
             },
         };
         return resetModal.makeModal(options);
+    }
+
+    buildSignupDenyModal() {
+        const { title, content } = DenySignupContent;
+        const signupDenyModal = new Modal(this.signupPage, 'deny-signup');
+        const options = {
+            width: '30rem',
+            title,
+            content,
+            footer: {
+                cancleBtn: {
+                    attrType: 'button',
+                    text: '확인',
+                },
+            },
+        };
+        return signupDenyModal.makeModal(options);
     }
 
     disableAllCSS() {

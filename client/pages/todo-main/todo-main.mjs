@@ -43,7 +43,7 @@ class TodoMain {
 
         const title = '로그인 성공';
         const content = '<img alt="fox" src="public/img/cute_fox.jpg" />';
-        const signupDenyModal = new Modal('success-login');
+        const signupDenyModal = new Modal(this.mainView, 'success-login');
         const options = {
             title,
             content,

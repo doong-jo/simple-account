@@ -11,13 +11,13 @@ class Modal {
      * @param {string} id 부여할 element id
      * @memberof Modal
      */
-    constructor(id) {
+    constructor(parent, id) {
         this.elementId = id;
 
         this.modalContainer = document.createElement('div');
         this.modalContainer.id = id;
         this.modalContainer.className = 'modal-container';
-        document.body.appendChild(this.modalContainer);
+        parent.appendChild(this.modalContainer);
     }
 
     /**
