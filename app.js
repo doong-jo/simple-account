@@ -9,6 +9,7 @@ const app = express();
 const notFoundHandler = require('./util/notFoundHandler');
 const serverInternalHandler = require('./util/serverInternalHandler');
 const mainRouter = require('./routes/routes');
+const redisRouter = require('./routes/redis');
 
 const port = 8090;
 const staticServe = express.static(path.join(__dirname, 'client'));
@@ -24,6 +25,7 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(redisRouter);
 app.use(staticServe);
 
 app.use('/', mainRouter);

@@ -7,6 +7,7 @@ const Constants = {
     COOKIE_SID_NAME: 'sid',
     SESSION_AGE: 10000, // test 10sec // 1hour 3600000
     SALT_ROUNDS: 10,
+    REDIS_EXPIRE: 60 * 60 * 24, // 24 hour
 
     CODE: {
         WRONG: 400,
