@@ -9,7 +9,9 @@ const router = express.Router();
 
 const _ = require('../services/constants');
 
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({
+    url: process.env.REDIS_URL
+});
 
 redisClient.on('connect', function () {
     console.log('Redis client connected');
