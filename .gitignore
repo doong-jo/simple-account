@@ -93,3 +93,5 @@ typings/
 src/index.dev.html
 
 .DS_Store
+
+dump.rdb
