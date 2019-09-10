@@ -24,7 +24,7 @@ module.exports = {
      * @param {string} d 일
      * @returns {boolean} 유효 여부
      */
-    validateDate(y, m, d) { return new Date(`${y}-${m}-${d}`).getDate() === d; },
+    validateDate(y, m, d) { return new Date(`${+y}-${+m}-${+d}`).getDate() === +d; },
 
 
     /**
@@ -87,15 +87,14 @@ module.exports = {
      * @returns {boolean} 유효 여부
      */
     checkYearOfBirth(value) {
-        // 4자리 양수 숫자
-        const age = new Date().getFullYear() - value + 1;
-
+        const age = new Date().getFullYear() - +value + 1;
+    
         const cases = [
-            () => (/(^[0-9]{4})$/.test(value)),
+            () => (/(^[0-9]{4})$/.test(`${+value}`)),
             () => (age >= 15),
             () => (age <= 99),
         ];
-
+    
         return getValidateResult(cases);
     },
 
@@ -107,13 +106,12 @@ module.exports = {
      * @returns {boolean} 유효 여부
      */
     checkMonthOfBirth(value) {
-        // 1 ~ 12
         const cases = [
             () => (
-                /(^[0-9]{1,2})$/.test(value) && value >= 1 && value <= 12
+                /(^[0-9]{1,2})$/.test(`${value}`) && +value >= 1 && +value <= 12
             ),
         ];
-
+    
         return getValidateResult(cases);
     },
 
@@ -125,11 +123,10 @@ module.exports = {
      * @returns {boolean} 유효 여부
      */
     checkDateOfBirth(value) {
-        // 1 ~ 31
         const cases = [
-            () => (/(^[0-9]{1,2})$/.test(value) && value >= 1 && value <= 31),
+            () => (/(^[0-9]{1,2})$/.test(`${value}`) && +value >= 1 && +value <= 31),
         ];
-
+    
         return getValidateResult(cases);
     },
 

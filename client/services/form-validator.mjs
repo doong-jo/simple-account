@@ -31,7 +31,7 @@ const FormValidator = {
      * @param {string} d 일
      * @returns {boolean} 유효 여부
      */
-    validateDate(y, m, d) { return new Date(`${y}-${m}-${d}`).getDate() === d; },
+    validateDate(y, m, d) { return new Date(`${+y}-${+m}-${+d}`).getDate() === +d; },
 
     /**
      * 유효한 아이디인지 검사합니다.
@@ -55,7 +55,6 @@ const FormValidator = {
      * @returns {object} 유효 여부
      */
     async checkIdAndExists(value) {
-        // 5 ~ 20, 영 소문자, 숫자, 특수기호 '['_', '-']'
         const cases = [
             () => (/(^[a-z0-9_-]{5,20})$/.test(value)),
             async () => {
@@ -78,7 +77,6 @@ const FormValidator = {
      * @returns {boolean} 유효 여부
      */
     checkPw(value) {
-        // 8 ~ 16, 영 대소문자, 숫자, 특수기호
         const cases = [
             () => (/^(.{8,16})$/.test(value)),
             () => (/[A-Z]/.test(value)),
@@ -98,7 +96,6 @@ const FormValidator = {
      * @returns {boolean} 유효 여부
      */
     checkName(value) {
-        // 2 ~ 20, 영 대소문자, 한글
         const cases = [
             () => (/(^[a-zA-Z가-힣]{2,20})$/.test(value)),
         ];
@@ -114,11 +111,10 @@ const FormValidator = {
      * @returns {boolean} 유효 여부
      */
     checkYearOfBirth(value) {
-        // 4자리 양수 숫자
-        const age = new Date().getFullYear() - value + 1;
-
+        const age = new Date().getFullYear() - +value + 1;
+    
         const cases = [
-            () => (/(^[0-9]{4})$/.test(value)),
+            () => (/(^[0-9]{4})$/.test(`${+value}`)),
             () => (age >= 15),
             () => (age <= 99),
         ];
@@ -134,10 +130,9 @@ const FormValidator = {
      * @returns {boolean} 유효 여부
      */
     checkMonthOfBirth(value) {
-        // 1 ~ 12
         const cases = [
             () => (
-                /(^[0-9]{1,2})$/.test(value) && value >= 1 && value <= 12
+                /(^[0-9]{1,2})$/.test(`${value}`) && +value >= 1 && +value <= 12
             ),
         ];
 
@@ -152,9 +147,8 @@ const FormValidator = {
      * @returns {boolean} 유효 여부
      */
     checkDateOfBirth(value) {
-        // 1 ~ 31
         const cases = [
-            () => (/(^[0-9]{1,2})$/.test(value) && value >= 1 && value <= 31),
+            () => (/(^[0-9]{1,2})$/.test(`${value}`) && +value >= 1 && +value <= 31),
         ];
 
         return getFailCase(cases);
@@ -168,7 +162,6 @@ const FormValidator = {
      * @returns {boolean} 유효 여부
      */
     checkSex(value) {
-        // '성별'은 불가
         const cases = [
             () => (value !== '성별' && (value === '남' || value === '여')),
         ];
@@ -184,7 +177,6 @@ const FormValidator = {
      * @returns {boolean} 유효 여부
      */
     checkEmail(value) {
-        // xxx@xxx.xxx 형식
         const cases = [
             () => (/(^[a-zA-Z]+)@([a-z]+)\.([a-z]+$)/.test(value)),
         ];
@@ -200,7 +192,6 @@ const FormValidator = {
      * @returns {boolean} 유효 여부
      */
     checkMobile(value) {
-        // 앞 3자리 010, 10자리 또는 11자리
         const cases = [
             () => (/([0][1][0])+(([0-9]){7,8})$/.test(value)),
         ];
