@@ -22,15 +22,14 @@ async function doLogout(id, pwd) {
 class TodoMain {
     constructor() {
         this.includedCSS = ['todo-main', 'modal'];
-
-        this.removeAllCSS = this.removeAllCSS.bind(this);
+        this.disableAllCSS = this.disableAllCSS.bind(this);
     }
 
     async render() {
         NodeBuilder.enableCSS('bootstrap');
 
         this.includedCSS.forEach((css) => {
-            NodeBuilder.appendCSS(css);
+            NodeBuilder.enableCSS(css);
         });
 
         this.view = TodoMainView;
@@ -63,9 +62,9 @@ class TodoMain {
         this.logoutBtn.addEventListener('click', doLogout);
     }
 
-    removeAllCSS() {
+    disableAllCSS() {
         this.includedCSS.forEach((cssName) => {
-            NodeBuilder.removeCSS(cssName);
+            NodeBuilder.disalbeCSS(cssName);
         });
     }
 }

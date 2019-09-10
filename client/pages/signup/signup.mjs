@@ -28,8 +28,6 @@ class Signup {
             NodeBuilder.enableCSS(css);
         });
 
-        this.includedCSS = ['signup', 'form', 'tag', 'modal'];
-
         this.view = SignupView;
         return this.view;
     }

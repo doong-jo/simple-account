@@ -16,11 +16,12 @@ const router = async () => {
         '#todo-main': { page: new TodoMain(), auth: true },
     };
 
-    const content = null || document.getElementById('page_container');
+    const content = document.getElementById('page_container');
     const parsedURL = window.location.hash;
 
     // 각 페이지에 맞는 렌더링을 수행한다.
     async function render() {
+        content.innerHTML = '';
         if (toggleEachPageCSS) { toggleEachPageCSS(); }
 
         const page = routes[parsedURL].page || Error404;
