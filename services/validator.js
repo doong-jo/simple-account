@@ -155,7 +155,7 @@ module.exports = {
     checkEmail(value) {
         
         const cases = [
-            () => (/(^[a-zA-Z]+)@([a-z]+)\.([a-z]+$)/.test(value)),
+            () => (/(^[a-zA-Z0-9]+)@([a-z]+)\.([a-z]+$)/.test(value)),
         ];
 
         return getValidateResult(cases);
