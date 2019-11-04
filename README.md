@@ -13,8 +13,6 @@
   <img alt="nodejs" src="https://img.shields.io/badge/nodejs-v10.16.3-green" />
   <img alt="npm" src="https://img.shields.io/badge/npm-v6.9.0-green" />
   <img alt="express" src="https://img.shields.io/badge/express-v4.17.1-green" />
-  <img alt="mysql" src="https://img.shields.io/badge/mysql-v5.7.27-green" />
-  <img alt="redis" src="https://img.shields.io/badge/redis-v4.0.9-green" />
 </p>
 
 
